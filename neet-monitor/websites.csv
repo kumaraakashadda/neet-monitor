@@ -1,0 +1,134 @@
+state,name,url,priority,category
+Central,MCC,https://mcc.nic.in/,HIGH,UG_PG
+Central,AACCC Ayush,https://aaccc.gov.in/,HIGH,Ayush
+Central,NMC,https://www.nmc.org.in/,HIGH,Regulator
+Central,NBE,https://nbe.edu.in/,HIGH,Regulator
+Central,NBE Natboard,https://www.natboard.edu.in/,HIGH,Regulator
+Central,NTA NEET,https://neet.nta.nic.in/,HIGH,Exam
+Central,NTA,https://nta.ac.in/,HIGH,Exam
+UttarPradesh,UP NEET,https://upneet.gov.in/,HIGH,UG_PG
+UttarPradesh,UP DGME,http://dgme.up.gov.in/Welcome/counselling,HIGH,UG_PG
+UttarPradesh,UP DGME Main,http://www.dgme.up.gov.in/,HIGH,UG_PG
+UttarPradesh,UP Ayush,https://www.upayushcounseling.upsdc.gov.in/default.aspx,HIGH,Ayush
+Rajasthan,Rajasthan DME,https://medicaleducation.rajasthan.gov.in/me/#/home/dptHome,HIGH,UG_PG
+Rajasthan,Rajasthan Education,https://educationsector.rajasthan.gov.in/,HIGH,UG_PG
+Rajasthan,Rajasthan UG NEET,https://www.rajugneet2024.org/,HIGH,UG
+Rajasthan,Rajasthan PG NEET,https://www.rajpgneet2024.org/,HIGH,PG
+Rajasthan,Rajasthan MDS,https://www.rajmdsneet2024.org/,HIGH,MDS
+Rajasthan,Rajasthan Ayush,https://rajugpgayushcounselling.in/,HIGH,Ayush
+Gujarat,Gujarat MedAdm,http://www.medadmgujarat.org/,HIGH,UG_PG
+MadhyaPradesh,MP DME,https://dme.mponline.gov.in/,HIGH,UG_PG
+MadhyaPradesh,MP MedEd,https://medicaleducation.mp.gov.in/,HIGH,UG_PG
+MadhyaPradesh,MP Ayush,https://ayush.mponline.gov.in/,HIGH,Ayush
+Bihar,Bihar BCECE,https://bceceboard.bihar.gov.in/,HIGH,UG_PG
+Maharashtra,Maharashtra CET 2022,https://cetcell.mahacet.org/CAP_landing_page_2022/,HIGH,UG_PG
+Maharashtra,Maharashtra CET 2023,https://cetcell.mahacet.org/CAP_landing_page_2023/,HIGH,UG_PG
+Central,AIIMS,https://www.aiimsexams.ac.in/,MEDIUM,Exam
+Central,JIPMER,https://jipmer.edu.in/,MEDIUM,UG_PG
+Central,AFMC,https://www.afmc.nic.in/,MEDIUM,Exam
+Central,AFMC DG,https://www.afmcdg1d.gov.in/,MEDIUM,Exam
+Central,JEE Main,https://jeemain.nta.nic.in/,MEDIUM,Exam
+Central,JEE Advanced,https://jeeadv.ac.in/,MEDIUM,Exam
+Central,ESIC,https://www.esic.nic.in/,MEDIUM,UG_PG
+Central,VCI,https://vci.admissions.nic.in/,MEDIUM,Vet
+Central,BHU,https://bhuonline.in/,MEDIUM,UG_PG
+Central,BHU Main,https://www.bhu.ac.in/Site/Home/1_2_16_Main-Site,MEDIUM,UG_PG
+Central,AMU,http://www.amucontrollerexams.com/,MEDIUM,UG_PG
+Central,Jamia Hamdard,http://jamiahamdard.edu/,MEDIUM,UG_PG
+Central,IPU Admissions,https://ipu.admissions.nic.in/,MEDIUM,UG_PG
+Central,IPU Schedule,https://ipu.admissions.nic.in/schedule-notices/,MEDIUM,UG_PG
+Central,IPU Main,http://www.ipu.ac.in/,MEDIUM,UG_PG
+Central,FMSC Delhi,https://fmsc.du.ac.in/,MEDIUM,UG_PG
+Central,FMSC,http://www.fmsc.ac.in/,MEDIUM,UG_PG
+Delhi,Delhi Ayush Unani,http://www.fmsc.ac.in/unani.htm,MEDIUM,Ayush
+Central,CPS Mumbai,https://www.cpsmumbai.org/Default,MEDIUM,PG
+Central,CMC Vellore,https://admissions.cmcvellore.ac.in/,MEDIUM,UG_PG
+Central,CMC Ludhiana,https://www.cmcludhiana.in/,MEDIUM,UG_PG
+Central,SMU,https://smu.edu.in/,MEDIUM,UG_PG
+AndhraPradesh,AP NTRUHS,http://ntruhs.ap.nic.in/,MEDIUM,UG_PG
+AndhraPradesh,AP DRYSR,https://drysr.uhsap.in/index.html,MEDIUM,UG_PG
+AndhraPradesh,AP Vet SVVU,https://svvu.edu.in/,LOW,Vet
+AndamanNicobar,AN College Admission,https://collegeadmission.andaman.gov.in/,LOW,UG_PG
+AndamanNicobar,AN ANIIMS,http://andssw1.and.nic.in/aniims/,LOW,UG_PG
+ArunachalPradesh,AR DHTE,http://apdhte.nic.in/,LOW,UG_PG
+Assam,Assam DME,https://dme.assam.gov.in/,MEDIUM,UG_PG
+Assam,Assam Ayush,https://ayush.assam.gov.in/,LOW,Ayush
+Assam,Assam Veterinary,https://veterinary.assam.gov.in/,LOW,Vet
+Bihar,Bihar BASU Vet,https://www.basu.org.in/,LOW,Vet
+Chandigarh,PGIMER,https://pgimer.edu.in/,MEDIUM,PG
+Chandigarh,GMCH Chandigarh,http://www.gmch.gov.in/,MEDIUM,UG_PG
+Chhattisgarh,CG DME,http://cgdme.co.in/,MEDIUM,UG_PG
+Chhattisgarh,CG Ayush Admissions,https://cgayush.admissions.nic.in/,MEDIUM,Ayush
+Chhattisgarh,CG Health,https://cghealth.nic.in/ehealth/dishm/councellinginfo.html,MEDIUM,Ayush
+Chhattisgarh,CG Vet CGKV,https://cgkv.ac.in/,LOW,Vet
+DadraDaman,DD VBCH,https://vbch.dnh.nic.in/,LOW,UG_PG
+DadraDaman,DD NAMO Meri,https://namomeriadmission.in/,LOW,UG_PG
+DadraDaman,DD NAMO DNHDD,http://namomeridnhdd.in/home-page,LOW,UG_PG
+Goa,Goa GMC,https://www.goa.gov.in/department/goa-medical-college-and-hospital/,MEDIUM,UG_PG
+Goa,Goa DTE,http://dte.goa.gov.in/,MEDIUM,UG_PG
+Gujarat,Gujarat Vet GVC,https://gvc.org.in/,LOW,Vet
+Haryana,Haryana UHSR,http://www.uhsr.ac.in/,MEDIUM,UG_PG
+Haryana,Haryana UG Counselling,https://uhsrugcounselling.com/Notice.aspx,MEDIUM,UG
+Haryana,Haryana DMER,https://dmer.haryana.gov.in/,MEDIUM,UG_PG
+Haryana,Haryana PG,https://hry.online-counselling.co.in/,MEDIUM,PG
+Haryana,Haryana Ayush SKAU,https://skau.ac.in/,LOW,Ayush
+Haryana,Haryana Ayush Onboard,https://skau.online-counselling.co.in/admissions/onboardingHomePage,LOW,Ayush
+Haryana,Haryana Vet LUVAS,https://www.luvas.edu.in/,LOW,Vet
+Haryana,Haryana BPT,http://haryanaphysiotherapycouncil.com/,LOW,BPT
+HimachalPradesh,HP IGMC PG,http://www.igmcshimla.edu.in/,MEDIUM,PG
+HimachalPradesh,HP University,https://www.hpuniv.ac.in/,MEDIUM,UG_PG
+HimachalPradesh,HP MMU Solan,https://www.mmusolan.org/,MEDIUM,UG_PG
+HimachalPradesh,HP Admissions,https://admissions.hpushimla.in/,MEDIUM,UG_PG
+HimachalPradesh,HP DMER,http://www.hp.gov.in/hpdmer/,MEDIUM,UG_PG
+HimachalPradesh,HP AMRU,https://amruhp.ac.in/,LOW,Ayush
+HimachalPradesh,HP HillAgric Vet,http://hillagric.ac.in/,LOW,Vet
+JammuKashmir,JK BOPEE,https://www.jkbopee.gov.in/,MEDIUM,UG_PG
+Jharkhand,Jharkhand JCECEB,https://jceceb.jharkhand.gov.in/,MEDIUM,UG_PG
+Karnataka,Karnataka CET,https://cetonline.karnataka.gov.in/,MEDIUM,UG_PG
+Karnataka,Karnataka Vet KVAFSU,https://www.kvafsu.edu.in/,LOW,Vet
+Kerala,Kerala CEE,https://www.cee.kerala.gov.in/,MEDIUM,UG_PG
+Kerala,Kerala CEE Alt,https://cee-kerala.org/,MEDIUM,UG_PG
+Maharashtra,Maharashtra Vet MAFSU,https://mafsu.ac.in/,LOW,Vet
+MadhyaPradesh,MP Ayush AIUG,https://ayush.mponline.gov.in/Portal/Services/AYUSH/AIUG/Index.aspx,MEDIUM,Ayush
+MadhyaPradesh,MP Ayush Gov,http://ayush.mp.gov.in/,MEDIUM,Ayush
+MadhyaPradesh,MP Vet NDVSU,https://www.ndvsu.org/,LOW,Vet
+MadhyaPradesh,MP Vet Crisp,http://crisponlineservices.com/,LOW,Vet
+Manipur,Manipur RIMS,http://www.rims.edu.in/secure/,MEDIUM,UG_PG
+Manipur,Manipur Health Dir,http://manipurhealthdirectorate.mn.gov.in/,MEDIUM,UG_PG
+Mizoram,Mizoram DHTE,https://dhte.mizoram.gov.in/,LOW,UG_PG
+Meghalaya,Meghalaya Health,https://meghealth.gov.in/,LOW,UG_PG
+Nagaland,Nagaland DTE,https://dte.nagaland.gov.in/,LOW,UG_PG
+Odisha,Odisha DME,http://www.dmetodisha.gov.in/,MEDIUM,UG_PG
+Odisha,Odisha DME PG,http://dmetodisha.in/,MEDIUM,PG
+Odisha,Odisha JEE,https://odishajee.com/,MEDIUM,UG
+Odisha,Odisha OJEE,https://ojee.nic.in/ojeecmsmbb,MEDIUM,UG
+Odisha,Odisha Ayush,http://www.ayushodisha.nic.in/,LOW,Ayush
+Odisha,Odisha Vet OUAT,http://www.ouat.nic.in/,LOW,Vet
+Odisha,Odisha DAHVS,https://dahvs.odisha.gov.in/,LOW,Vet
+Puducherry,Puducherry CENTAC,https://www.centacpuducherry.in/,MEDIUM,UG_PG
+Puducherry,Puducherry River Vet,https://river.edu.in/admission-procedure,LOW,Vet
+Punjab,Punjab BFUHS,https://bfuhs.ac.in/,MEDIUM,UG_PG
+Punjab,Punjab Vet GADVASU,https://www.gadvasu.in/,LOW,Vet
+Punjab,Punjab Ayush GRAU Reg,https://grauadmission.smartpad.in/Registration/,LOW,Ayush
+Punjab,Punjab Ayush GRAU,https://www.graupunjab.org/,LOW,Ayush
+Rajasthan,Rajasthan Vet RAJUVAS,https://rajuvas.org/,LOW,Vet
+Rajasthan,Rajasthan BPT RUHS,https://ruhsraj.org/,LOW,BPT
+TamilNadu,TN Med Selection,https://tnmedicalselection.net/,MEDIUM,UG_PG
+TamilNadu,TN Health,https://tnhealth.tn.gov.in/,MEDIUM,UG_PG
+TamilNadu,TN Vet TANUVAS,https://tanuvas.ac.in/,LOW,Vet
+Telangana,Telangana KNRUHS,http://knruhs.telangana.gov.in/,MEDIUM,UG_PG
+Telangana,Telangana Vet TSVU,https://tsvu.nic.in/,LOW,Vet
+Telangana,Telangana VAHD,https://vahd.telangana.gov.in/,LOW,Vet
+Telangana,Telangana PJTSAU,https://www.pjtsau.edu.in/,LOW,Vet
+Tripura,Tripura DME,https://dme.tripura.gov.in/,MEDIUM,UG_PG
+Tripura,Tripura TVC Vet,https://tvc.tripura.gov.in/,LOW,Vet
+Tripura,Tripura ARDD,https://ardd.tripura.gov.in/college_home,LOW,Vet
+Tripura,Tripura BPT TIPS,https://tipsindia.co.in/bpt/,LOW,BPT
+UttarPradesh,UP Vet UPVETUNIV,https://upvetuniv.edu.in/,LOW,Vet
+Uttarakhand,UK HNBUMU,http://www.hnbumu.ac.in/,MEDIUM,UG_PG
+Uttarakhand,UK Ayush UAU,https://uau.ac.in/,LOW,Ayush
+Uttarakhand,UK Vet GBPUAT,https://www.gbpuat.ac.in/,LOW,Vet
+Uttarakhand,UK Vet Council,https://ahd.uk.gov.in/pages/display/133-uttarakhand-veterinary-council,LOW,Vet
+WestBengal,WB MCC,https://wbmcc.nic.in/,MEDIUM,UG_PG
+WestBengal,WB Vet WBUAFSCE,https://www.wbuafsce.org/,LOW,Vet
+WestBengal,WB BPT WBJEEB,https://wbjeeb.in/,LOW,BPT
