@@ -1,638 +1,1014 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NEET Counselling Monitor</title>
+<html><head><meta charset="utf-8"><title>NEET Monitor</title>
 <style>
-:root{--navy:#0f1f5c;--blue:#1a4fad;--sky:#2d9cdb;--teal:#0d9488;--green:#16a34a;--red:#dc2626;--purple:#7c3aed;--bg:#f1f5fb;--border:#dde6f5;--muted:#64748b}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:#0f172a;min-height:100vh}
+ body{font-family:system-ui,sans-serif;max-width:1100px;margin:2rem auto;padding:0 1rem;color:#222}
+ h1{margin:0 0 .5rem} .muted{color:#666}
+ table{border-collapse:collapse;width:100%;margin:1rem 0}
+ th,td{border:1px solid #ddd;padding:.4rem .6rem;text-align:left;font-size:.9rem}
+ th{background:#f4f4f4}
+ .ok{color:#0a7a2f} .fail{color:#b00020} .high{background:#fff6d5}
+ .card{background:#fafafa;border:1px solid #eee;padding:1rem;border-radius:8px;margin:.5rem 0}
+</style></head><body>
+<h1>NEET Counselling Monitor</h1>
+<p class="muted">Generated 2026-07-25T13:51:17+00:00 UTC</p>
 
-/* ── MODAL ── */
-#mo{position:fixed;inset:0;z-index:9999;background:rgba(10,20,60,.85);display:flex;align-items:center;justify-content:center;padding:1rem}
-#mb{background:#fff;border-radius:20px;max-width:460px;width:100%;box-shadow:0 25px 60px rgba(0,0,0,.4);overflow:hidden}
-#mh{background:linear-gradient(135deg,var(--navy),var(--blue) 60%,var(--sky));padding:1.75rem;color:#fff}
-#mh h2{font-size:1.25rem;font-weight:800}
-#mh p{margin-top:.4rem;font-size:.85rem;opacity:.85;line-height:1.5}
-#mbody{padding:1.5rem 1.75rem 1.75rem}
-.step{display:none}.step.active{display:block}
-.step-ind{display:flex;gap:.5rem;margin-bottom:1.5rem}
-.step-dot{flex:1;height:4px;border-radius:2px;background:#e2e8f0;transition:background .3s}
-.step-dot.done{background:var(--green)}.step-dot.active{background:var(--blue)}
-.field{margin-bottom:1.1rem}
-.field label{display:block;font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem}
-.field input,.field select{width:100%;padding:.65rem .9rem;border:1.5px solid var(--border);border-radius:10px;font-size:.95rem;outline:none;background:#f8faff;transition:border .2s}
-.field input:focus,.field select:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 3px rgba(26,79,173,.1)}
-.hint{font-size:.8rem;color:var(--muted);margin-top:.3rem}
-.hint.ok{color:var(--green);font-weight:600}.hint.err{color:var(--red);font-weight:600;display:none}
-.ph-note{background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:.75rem 1rem;font-size:.83rem;color:#166534;line-height:1.5;margin-bottom:1rem}
-.btn-row{display:flex;gap:.6rem;margin-top:.5rem}
-.btn{flex:1;padding:.7rem;border:none;border-radius:10px;font-size:.95rem;font-weight:700;cursor:pointer}
-.btn:disabled{opacity:.5;cursor:not-allowed}
-.btn-p{background:linear-gradient(90deg,var(--blue),var(--teal));color:#fff;box-shadow:0 4px 14px rgba(26,79,173,.25)}
-.btn-s{background:#f1f5f9;color:#334155}
-.btn-otp{background:var(--blue);color:#fff;padding:.65rem 1rem;border:none;border-radius:10px;font-size:.82rem;font-weight:700;cursor:pointer;white-space:nowrap}
-.btn-otp:disabled{background:#94a3b8;cursor:not-allowed}
-.ir{display:flex;gap:.5rem}.ir input{flex:1}
-#msuccess{display:none;text-align:center;padding:2rem 1.75rem}
-#msuccess .tick{font-size:3.5rem;margin-bottom:.75rem}
-#msuccess h3{font-size:1.25rem;font-weight:800;color:var(--green)}
-#msuccess p{margin-top:.5rem;font-size:.9rem;color:var(--muted);line-height:1.5}
-#msuccess .go{margin-top:1.25rem;padding:.7rem 2.5rem;background:var(--green);color:#fff;border:none;border-radius:10px;font-weight:800;cursor:pointer;font-size:.95rem}
-
-/* ── LAYOUT ── */
-.hdr{background:linear-gradient(135deg,var(--navy),var(--blue) 55%,var(--teal));color:#fff;padding:2rem 2rem 1.6rem;position:relative;overflow:hidden}
-.hdr::before{content:'';position:absolute;top:-50px;right:-50px;width:200px;height:200px;background:rgba(255,255,255,.06);border-radius:50%}
-.hdr-in{position:relative;z-index:1;max-width:1280px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-.hdr h1{font-size:1.85rem;font-weight:900;letter-spacing:-.5px;line-height:1.15}
-.hdr h1 span{color:#7dd3fc}
-.hdr .sub{margin-top:.35rem;font-size:.9rem;opacity:.8}
-.hdr .ts{margin-top:.5rem;font-size:.75rem;opacity:.6}
-.hdr-btn{background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);color:#fff;padding:.6rem 1.2rem;border-radius:10px;font-weight:700;font-size:.875rem;cursor:pointer}
-
-/* ── MAIN GRID ── */
-.page{max-width:1280px;margin:0 auto;padding:1.5rem 1.25rem 3rem;display:grid;grid-template-columns:1fr 300px;gap:1.5rem}
-@media(max-width:900px){.page{grid-template-columns:1fr}}
-
-/* ── SIDEBAR ── */
-.sidebar{display:flex;flex-direction:column;gap:1rem}
-.sidebar-title{font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.25rem}
-
-/* Product cards */
-.prod-card{background:#fff;border-radius:14px;border:1px solid var(--border);box-shadow:0 2px 10px rgba(0,0,0,.07);overflow:hidden;transition:box-shadow .2s;display:block;text-decoration:none;color:inherit}
-.prod-card:hover{box-shadow:0 6px 20px rgba(26,79,173,.15)}
-.prod-card img{width:100%;height:190px;object-fit:cover;object-position:top center;display:block}
-.prod-card .pc-body{padding:.85rem 1rem}
-.prod-card .pc-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.55rem}
-.pc-tag{display:inline-block;border-radius:999px;font-size:.63rem;font-weight:800;text-transform:uppercase;padding:3px 9px;letter-spacing:.03em}
-.pc-tag.rec{background:#fff0f3;color:#dc2626;border:1px solid #fca5a5}
-.pc-tag.val{background:#f0fdf4;color:#166534;border:1px solid #86efac}
-.pc-tag.disc{background:#fef9c3;color:#854d0e;border:1px solid #fde68a}
-.pc-tag.lim{background:#ede9fe;color:#5b21b6;border:1px solid #c4b5fd}
-.prod-card .pc-name{font-size:.88rem;font-weight:800;color:#0f172a;line-height:1.4;margin-bottom:.5rem}
-.prod-card .pc-btn{display:block;margin-top:.65rem;text-align:center;background:linear-gradient(90deg,var(--blue),var(--teal));color:#fff;padding:.55rem;border-radius:8px;font-size:.82rem;font-weight:700}
-.call-box{background:linear-gradient(135deg,#fff7ed,#fef3c7);border:1.5px solid #f59e0b;border-radius:12px;padding:.9rem 1rem;text-align:center}
-.call-box .cb-label{font-size:.72rem;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem}
-.call-box .cb-num{font-size:1.2rem;font-weight:900;color:#0f172a;text-decoration:none;display:block;margin:.25rem 0}
-.call-box .cb-sub{font-size:.73rem;color:#92400e;margin-top:.2rem}
-.yt-link{display:flex;align-items:center;gap:.6rem;background:#fff;border:1.5px solid #fee2e2;border-radius:12px;padding:.75rem 1rem;text-decoration:none;color:#0f172a;transition:background .15s}
-.yt-link:hover{background:#fff5f5}
-.yt-icon{width:32px;height:32px;background:#ff0000;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.yt-text{font-size:.83rem;font-weight:700;line-height:1.3}
-.yt-sub{font-size:.72rem;color:var(--muted);font-weight:400}
-
-/* Promo banner */
-.promo-banner{background:linear-gradient(135deg,#0f1f5c,#1a4fad);border-radius:14px;padding:1.1rem 1.1rem;color:#fff;text-align:center}
-.promo-banner h3{font-size:.95rem;font-weight:800;line-height:1.4}
-.promo-banner p{font-size:.78rem;opacity:.85;margin:.4rem 0 .75rem;line-height:1.4}
-.promo-banner a{display:block;background:#fff;color:var(--navy);border-radius:8px;padding:.5rem;font-size:.82rem;font-weight:800;text-decoration:none}
-.promo-banner a:hover{background:#f0f4ff}
-
-/* ── MAIN CONTENT ── */
-.main{}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;margin-bottom:1.25rem}
-.stat{background:#fff;border-radius:14px;padding:1rem 1.1rem;border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.05)}
-.stat .lbl{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:.3rem}
-.stat .val{font-size:2rem;font-weight:900;line-height:1}
-.stat .note{font-size:.72rem;color:var(--muted);margin-top:.25rem}
-.s-t .val{color:var(--blue)}.s-o .val{color:var(--green)}.s-f .val{color:var(--red)}.s-c .val{color:var(--purple)}
-.ri{background:#fff;border:1px solid var(--border);border-radius:12px;padding:.85rem 1.1rem;margin-bottom:1.25rem;font-size:.85rem;color:#334155;display:flex;flex-wrap:wrap;gap:.7rem}
-.sh{display:flex;align-items:center;gap:.6rem;margin:1.75rem 0 .85rem}
-.sh h2{font-size:1.05rem;font-weight:800}
-.badge{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 6px;border-radius:999px;font-size:.72rem;font-weight:800;background:var(--blue);color:#fff}
-.badge.g{background:var(--green)}.badge.p{background:var(--purple)}
-.changes{display:flex;flex-direction:column;gap:.65rem}
-.cc{background:#fff;border-radius:12px;border:1.5px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.04);display:grid;grid-template-columns:5px 1fr;overflow:hidden}
-.cc .ac{background:var(--purple)}.cc.pdf .ac{background:var(--red)}.cc.notice .ac{background:var(--blue)}
-.cc .bd{padding:.8rem 1rem}
-.cc .top{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;margin-bottom:.35rem}
-.cc .sn{font-weight:800;font-size:.95rem}
-.cc .sm{font-size:.85rem;color:#334155;line-height:1.5;word-break:break-word}
-.cc .wh{font-size:.72rem;color:var(--muted);margin-top:.3rem}
-.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.67rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
-.pill.HIGH{background:#fef9c3;color:#92400e;border:1px solid #fde68a}
-.pill.MEDIUM{background:#dbeafe;color:#1e40af;border:1px solid #93c5fd}
-.pill.LOW{background:#f1f5f9;color:#475569;border:1px solid #cbd5e1}
-.pill.pdf{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
-.pill.notice{background:#ede9fe;color:#5b21b6;border:1px solid #c4b5fd}
-.tw{background:#fff;border-radius:14px;border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.04);overflow:hidden}
-.fb{padding:.7rem 1rem;border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
-.fb input{flex:1;min-width:140px;border:1.5px solid var(--border);border-radius:8px;padding:.38rem .7rem;font-size:.85rem;outline:none}
-.fb input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,79,173,.12)}
-.fb button{padding:.35rem .8rem;border-radius:8px;font-size:.76rem;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:#0f172a}
-.fb button.act,.fb button:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
-.ov{overflow-x:auto}
-table{width:100%;border-collapse:collapse}
-thead th{background:#f8faff;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:.6rem 1rem;text-align:left;border-bottom:1px solid var(--border)}
-tbody tr{border-bottom:1px solid var(--border);transition:background .1s}
-tbody tr:last-child{border-bottom:none}
-tbody tr:hover{background:#f8faff}
-tbody td{padding:.55rem 1rem;font-size:.83rem;vertical-align:middle}
-.sl{color:var(--blue);text-decoration:none;font-size:.75rem}
-.sl:hover{text-decoration:underline}
-.ok-d{color:var(--green);font-weight:700;font-size:.8rem}.ok-d::before{content:'● '}
-.fail-d{color:var(--red);font-weight:700;font-size:.8rem}.fail-d::before{content:'● '}
-.s0{color:var(--green);font-weight:800}.shi{color:var(--red);font-weight:800}
-tr.rf{background:#fff5f5}
-tr.rf:hover{background:#fee2e2}
-footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--muted)}
-@media(max-width:640px){thead th:nth-child(3),tbody td:nth-child(3){display:none} .hdr h1{font-size:1.35rem}}
-</style>
-</head>
-<body>
-
-<!-- ══ MODAL ══ -->
-<div id="mo">
- <div id="mb">
-  <div id="mh">
-   <h2>🏥 NEET Counselling Monitor</h2>
-   <p>Live alerts for 133 official counselling websites.<br>Enter your details once — takes 2 minutes.</p>
-  </div>
-  <div id="mbody">
-   <div class="step-ind">
-    <div class="step-dot active" id="d1"></div>
-    <div class="step-dot" id="d2"></div>
-    <div class="step-dot" id="d3"></div>
-   </div>
-   <!-- Step 1 -->
-   <div class="step active" id="s1">
-    <div class="field">
-     <label>Full Name</label>
-     <input type="text" id="f-name" placeholder="e.g. Rahul Sharma">
-     <div class="hint err" id="e-name">Please enter your name</div>
-    </div>
-    <div class="field">
-     <label>Mobile Number</label>
-     <input type="tel" id="f-phone" placeholder="10-digit WhatsApp number" maxlength="10">
-     <div class="hint err" id="e-phone">Enter a valid 10-digit number</div>
-    </div>
-    <div class="ph-note">📱 We may send NEET counselling alerts on WhatsApp. Enter your real number so you don't miss important updates.</div>
-    <div class="btn-row"><button class="btn btn-p" onclick="s1next()">Continue →</button></div>
-   </div>
-   <!-- Step 2 -->
-   <div class="step" id="s2">
-    <div class="field">
-     <label>Email Address</label>
-     <div class="ir">
-      <input type="email" id="f-email" placeholder="you@example.com">
-      <button class="btn-otp" id="btn-eotp" onclick="sendOTP()">Send OTP</button>
-     </div>
-     <div class="hint err" id="e-email">Enter a valid email address</div>
-     <div class="hint ok" id="h-sent" style="display:none">✅ OTP sent! Check your inbox (and spam folder).</div>
-    </div>
-    <div class="field" id="otp-field" style="display:none">
-     <label>Enter OTP from Email</label>
-     <div class="ir">
-      <input type="number" id="f-otp" placeholder="6-digit code">
-      <button class="btn-otp" id="btn-ver" onclick="verOTP()">Verify</button>
-     </div>
-     <div class="hint err" id="e-otp">Incorrect OTP. Try again.</div>
-     <div class="hint ok" id="h-ver" style="display:none">✅ Email verified!</div>
-     <div class="hint" id="h-resend" style="display:none">Didn't receive it? <a href="#" onclick="sendOTP();return false" style="color:var(--blue)">Resend OTP</a></div>
-    </div>
-    <div class="btn-row">
-     <button class="btn btn-s" onclick="goS(1)">← Back</button>
-     <button class="btn btn-p" id="btn-s2n" onclick="s2next()" disabled>Continue →</button>
-    </div>
-   </div>
-   <!-- Step 3 -->
-   <div class="step" id="s3">
-    <div class="field">
-     <label>State Domicile</label>
-     <select id="f-state">
-      <option value="">— Select your home state —</option>
-      <option>Andhra Pradesh</option><option>Arunachal Pradesh</option><option>Assam</option>
-      <option>Bihar</option><option>Chhattisgarh</option><option>Goa</option><option>Gujarat</option>
-      <option>Haryana</option><option>Himachal Pradesh</option><option>Jharkhand</option>
-      <option>Jammu &amp; Kashmir</option><option>Karnataka</option><option>Kerala</option>
-      <option>Ladakh</option><option>Madhya Pradesh</option><option>Maharashtra</option>
-      <option>Manipur</option><option>Meghalaya</option><option>Mizoram</option>
-      <option>Nagaland</option><option>Odisha</option><option>Punjab</option>
-      <option>Rajasthan</option><option>Sikkim</option><option>Tamil Nadu</option>
-      <option>Telangana</option><option>Tripura</option><option>Uttar Pradesh</option>
-      <option>Uttarakhand</option><option>West Bengal</option>
-      <option>Andaman &amp; Nicobar Islands</option><option>Chandigarh</option>
-      <option>Dadra &amp; Nagar Haveli</option><option>Delhi</option>
-      <option>Lakshadweep</option><option>Puducherry</option>
-     </select>
-     <div class="hint err" id="e-state">Please select your state</div>
-    </div>
-    <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem;line-height:1.5">We use your state to highlight the most relevant counselling updates for you.</p>
-    <div class="btn-row">
-     <button class="btn btn-s" onclick="goS(2)">← Back</button>
-     <button class="btn btn-p" id="btn-sub" onclick="submit()">🚀 Access Dashboard</button>
-    </div>
-    <p style="font-size:.72rem;color:var(--muted);margin-top:.75rem;text-align:center">Your data is stored securely. Never sold or shared.</p>
-   </div>
-  </div>
-  <div id="msuccess">
-   <div class="tick">🎉</div>
-   <h3>You're all set!</h3>
-   <p>Your details are saved. You now have full access to the NEET Monitor dashboard.</p>
-   <button class="go" onclick="closeModal()">Open Dashboard →</button>
-  </div>
- </div>
+<div class="card">
+  <b>Last run:</b>
+  
+    started 2026-07-25T13:48:10+00:00 — finished 2026-07-25T13:51:16+00:00<br>
+    total 133, ok 80, failed 53,
+    changes 0
+  
 </div>
 
-<!-- ══ HEADER ══ -->
-<div class="hdr">
- <div class="hdr-in">
-  <div>
-   <h1>🏥 NEET Counselling <span>Monitor</span></h1>
-   <div class="sub">Watching 133 official websites across India — real-time change detection</div>
-   <div class="ts">Last scan: 25 Jul 2026, 07:31 UTC · Auto-scans every 30 minutes</div>
-  </div>
-  <button class="hdr-btn" onclick="showModal()">📝 Update Profile</button>
- </div>
-</div>
+<h2>Failing sites (53)</h2>
 
-<!-- ══ PAGE BODY ══ -->
-<div class="page">
+<table><tr><th>Site</th><th>URL</th><th>Streak</th><th>Last error</th></tr>
 
- <!-- ── MAIN CONTENT ── -->
- <div class="main">
-  <div class="stats">
-   <div class="stat s-t"><div class="lbl">Total Sites</div><div class="val">133</div><div class="note">monitored this run</div></div>
-   <div class="stat s-o"><div class="lbl">Responded OK</div><div class="val">79</div><div class="note">59% reachable</div></div>
-   <div class="stat s-f"><div class="lbl">Failed / Down</div><div class="val">54</div><div class="note">many block bots</div></div>
-   <div class="stat s-c"><div class="lbl">Changes Found</div><div class="val">4</div><div class="note">Telegram alerts sent</div></div>
-  </div>
+<tr><td>NBE Natboard</td><td>https://www.natboard.edu.in/</td>
+<td>7</td><td>HTTP 403</td></tr>
 
-  <div class="ri">
-   <span>⏱ <b>Duration:</b> 2m 59s</span>
-   <span>🕐 <b>Started:</b> 2026-07-25 07:28 UTC</span>
-   <span>✅ <b>Finished:</b> 2026-07-25 07:31 UTC</span>
-  </div>
+<tr><td>Maharashtra CET 2022</td><td>https://cetcell.mahacet.org/CAP_landing_page_2022/</td>
+<td>7</td><td>HTTP 404</td></tr>
 
-  <div class="sh"><h2>🔔 Recent Changes Detected</h2><span class="badge p">4</span></div>
-  <div class="changes">
-   <div class="cc pdf"><div class="ac"></div><div class="bd">
-    <div class="top"><span class="sn">TN Med Selection</span><span class="pill MEDIUM">MEDIUM</span><span class="pill pdf">PDF Added</span></div>
-    <div class="sm">📄 New PDF: <a href="https://tnmedicalselection.net/news/25072026002646.pdf" target="_blank" style="color:var(--blue);word-break:break-all">tnmedicalselection.net/news/25072026002646.pdf</a></div>
-    <div class="wh">🕐 2026-07-25 07:30 UTC</div>
-   </div></div>
-   <div class="cc notice"><div class="ac"></div><div class="bd">
-    <div class="top"><span class="sn">TN Med Selection</span><span class="pill MEDIUM">MEDIUM</span><span class="pill notice">Notice Added</span></div>
-    <div class="sm">🔔 <em>"Notification-009 — Reopening of online application window for MBBS/BDS degree courses (2026–2027 session). Notification-008 — No need to upload NEET scorecard…"</em></div>
-    <div class="wh">🕐 2026-07-25 07:30 UTC</div>
-   </div></div>
-   <div class="cc notice"><div class="ac"></div><div class="bd">
-    <div class="top"><span class="sn">TN Med Selection</span><span class="pill MEDIUM">MEDIUM</span><span class="pill notice">Notice Added</span></div>
-    <div class="sm">🔔 <em>"2026 — TN MBBS &amp; BDS Application Tutorial | PG, Super Speciality, Post Graduate Medical, Post Graduate Dental, DNB…"</em></div>
-    <div class="wh">🕐 2026-07-25 07:30 UTC</div>
-   </div></div>
-   <div class="cc notice"><div class="ac"></div><div class="bd">
-    <div class="top"><span class="sn">TN Med Selection</span><span class="pill MEDIUM">MEDIUM</span><span class="pill notice">Notice Added</span></div>
-    <div class="sm">🔔 <em>"July 2026 — Notification-009 — Reopening of online application window for MBBS/BDS degree courses (2026–2027 session)…"</em></div>
-    <div class="wh">🕐 2026-07-25 07:30 UTC</div>
-   </div></div>
-  </div>
+<tr><td>Maharashtra CET 2023</td><td>https://cetcell.mahacet.org/CAP_landing_page_2023/</td>
+<td>7</td><td>HTTP 404</td></tr>
 
-  <div class="sh" style="margin-top:2rem"><h2>📋 All Sites Status</h2><span class="badge">133</span></div>
-  <div class="tw">
-   <div class="fb">
-    <input type="text" id="searchBox" placeholder="🔍 Search site or URL…" oninput="ap()">
-    <button class="act" onclick="setF('all',this)">All</button>
-    <button onclick="setF('ok',this)">✅ OK</button>
-    <button onclick="setF('fail',this)">❌ Failed</button>
-    <button onclick="setF('high',this)">⭐ HIGH</button>
-   </div>
-   <div class="ov"><table id="T">
-    <thead><tr><th>#</th><th>Site</th><th>URL</th><th>Priority</th><th>Last OK</th><th>Last Fail</th><th>Streak</th><th>Status</th></tr></thead>
-    <tbody>
-<tr data-p="HIGH" data-s="fail" class="rf"><td>1</td><td>NBE Natboard</td><td><a class="sl" href="https://www.natboard.edu.in/" target="_blank">natboard.edu.in</a></td><td><span class="pill HIGH">HIGH</span></td><td>—</td><td>07:28</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="HIGH" data-s="ok"><td>2</td><td>NBE</td><td><a class="sl" href="https://nbe.edu.in/" target="_blank">nbe.edu.in</a></td><td><span class="pill HIGH">HIGH</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="HIGH" data-s="ok"><td>3</td><td>MCC</td><td><a class="sl" href="https://mcc.nic.in/" target="_blank">mcc.nic.in</a></td><td><span class="pill HIGH">HIGH</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="HIGH" data-s="ok"><td>4</td><td>AACCC Ayush</td><td><a class="sl" href="https://aaccc.gov.in/" target="_blank">aaccc.gov.in</a></td><td><span class="pill HIGH">HIGH</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="HIGH" data-s="ok"><td>5</td><td>NTA</td><td><a class="sl" href="https://nta.ac.in/" target="_blank">nta.ac.in</a></td><td><span class="pill HIGH">HIGH</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="HIGH" data-s="ok"><td>6</td><td>NTA NEET</td><td><a class="sl" href="https://neet.nta.nic.in/" target="_blank">neet.nta.nic.in</a></td><td><span class="pill HIGH">HIGH</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="HIGH" data-s="ok"><td>7</td><td>NMC</td><td><a class="sl" href="https://www.nmc.org.in/" target="_blank">nmc.org.in</a></td><td><span class="pill HIGH">HIGH</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="HIGH" data-s="ok"><td>8</td><td>Rajasthan DME</td><td><a class="sl" href="https://medicaleducation.rajasthan.gov.in/me/#/home/dptHome" target="_blank">medicaleducation.rajasthan.gov.in</a></td><td><span class="pill HIGH">HIGH</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="HIGH" data-s="ok"><td>9</td><td>Rajasthan Ayush</td><td><a class="sl" href="https://rajugpgayushcounselling.in/" target="_blank">rajugpgayushcounselling.in</a></td><td><span class="pill HIGH">HIGH</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="HIGH" data-s="fail" class="rf"><td>10</td><td>Rajasthan UG NEET</td><td><a class="sl" href="https://rajugneet2026.com/" target="_blank">rajugneet2026.com</a></td><td><span class="pill HIGH">HIGH</span></td><td>—</td><td>07:28</td><td class="shi">2</td><td><span class="fail-d">Re-checking</span></td></tr>
-<tr data-p="HIGH" data-s="fail" class="rf"><td>11</td><td>Rajasthan PG NEET</td><td><a class="sl" href="https://rajugneet2026.com/" target="_blank">rajugneet2026.com</a></td><td><span class="pill HIGH">HIGH</span></td><td>—</td><td>07:28</td><td class="shi">2</td><td><span class="fail-d">Re-checking</span></td></tr>
-<tr data-p="HIGH" data-s="fail" class="rf"><td>12</td><td>Rajasthan MDS</td><td><a class="sl" href="https://rajugneet2026.com/" target="_blank">rajugneet2026.com</a></td><td><span class="pill HIGH">HIGH</span></td><td>—</td><td>07:28</td><td class="shi">2</td><td><span class="fail-d">Re-checking</span></td></tr>
-<tr data-p="HIGH" data-s="fail" class="rf"><td>13</td><td>Rajasthan Education</td><td><a class="sl" href="https://education.rajasthan.gov.in/home" target="_blank">education.rajasthan.gov.in</a></td><td><span class="pill HIGH">HIGH</span></td><td>—</td><td>07:28</td><td class="shi">2</td><td><span class="fail-d">Re-checking</span></td></tr>
-<tr data-p="HIGH" data-s="ok"><td>14</td><td>UP NEET</td><td><a class="sl" href="https://upneet.gov.in/" target="_blank">upneet.gov.in</a></td><td><span class="pill HIGH">HIGH</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="HIGH" data-s="ok"><td>15</td><td>UP DGME</td><td><a class="sl" href="http://dgme.up.gov.in/Welcome/counselling" target="_blank">dgme.up.gov.in</a></td><td><span class="pill HIGH">HIGH</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="HIGH" data-s="ok"><td>16</td><td>MP DME</td><td><a class="sl" href="https://dme.mponline.gov.in/" target="_blank">dme.mponline.gov.in</a></td><td><span class="pill HIGH">HIGH</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="HIGH" data-s="ok"><td>17</td><td>MP MedEd</td><td><a class="sl" href="https://medicaleducation.mp.gov.in/" target="_blank">medicaleducation.mp.gov.in</a></td><td><span class="pill HIGH">HIGH</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="HIGH" data-s="ok"><td>18</td><td>MP Ayush</td><td><a class="sl" href="https://ayush.mponline.gov.in/" target="_blank">ayush.mponline.gov.in</a></td><td><span class="pill HIGH">HIGH</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="HIGH" data-s="ok"><td>19</td><td>Gujarat MedAdm</td><td><a class="sl" href="http://www.medadmgujarat.org/" target="_blank">medadmgujarat.org</a></td><td><span class="pill HIGH">HIGH</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="HIGH" data-s="ok"><td>20</td><td>Bihar BCECE</td><td><a class="sl" href="https://bceceboard.bihar.gov.in/" target="_blank">bceceboard.bihar.gov.in</a></td><td><span class="pill HIGH">HIGH</span></td><td>07:16</td><td>07:29</td><td class="shi">1</td><td><span class="fail-d">Flaky</span></td></tr>
-<tr data-p="HIGH" data-s="fail" class="rf"><td>21</td><td>Maharashtra CET</td><td><a class="sl" href="https://cetcell.mahacet.org/" target="_blank">cetcell.mahacet.org</a></td><td><span class="pill HIGH">HIGH</span></td><td>—</td><td>07:28</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>22</td><td>AIIMS</td><td><a class="sl" href="https://www.aiimsexams.ac.in/" target="_blank">aiimsexams.ac.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>23</td><td>JIPMER</td><td><a class="sl" href="https://jipmer.edu.in/" target="_blank">jipmer.edu.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>24</td><td>JEE Advanced</td><td><a class="sl" href="https://jeeadv.ac.in/" target="_blank">jeeadv.ac.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>25</td><td>JEE Main</td><td><a class="sl" href="https://jeemain.nta.nic.in/" target="_blank">jeemain.nta.nic.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>26</td><td>BHU Online</td><td><a class="sl" href="https://bhuonline.in/" target="_blank">bhuonline.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>27</td><td>AMU</td><td><a class="sl" href="http://www.amucontrollerexams.com/" target="_blank">amucontrollerexams.com</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>28</td><td>VCI</td><td><a class="sl" href="https://vci.admissions.nic.in/" target="_blank">vci.admissions.nic.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>29</td><td>IPU Admissions</td><td><a class="sl" href="https://ipu.admissions.nic.in/" target="_blank">ipu.admissions.nic.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>30</td><td>IPU Main</td><td><a class="sl" href="http://www.ipu.ac.in/" target="_blank">ipu.ac.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>31</td><td>FMSC Delhi</td><td><a class="sl" href="https://fmsc.du.ac.in/" target="_blank">fmsc.du.ac.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>32</td><td>CMC Vellore</td><td><a class="sl" href="https://admissions.cmcvellore.ac.in/" target="_blank">admissions.cmcvellore.ac.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="fail" class="rf"><td>33</td><td>CPS Mumbai</td><td><a class="sl" href="https://www.cpsmumbai.org/Default" target="_blank">cpsmumbai.org</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>—</td><td>07:28</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>34</td><td>SMU</td><td><a class="sl" href="https://smu.edu.in/" target="_blank">smu.edu.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>35</td><td>CMC Ludhiana</td><td><a class="sl" href="https://www.cmcludhiana.in/" target="_blank">cmcludhiana.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="fail" class="rf"><td>36</td><td>AFMC</td><td><a class="sl" href="https://www.afmc.nic.in/" target="_blank">afmc.nic.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>—</td><td>07:28</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>37</td><td>AFMC DG</td><td><a class="sl" href="https://www.afmcdg1d.gov.in/" target="_blank">afmcdg1d.gov.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>38</td><td>PGIMER</td><td><a class="sl" href="https://pgimer.edu.in/" target="_blank">pgimer.edu.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>39</td><td>Kerala CEE</td><td><a class="sl" href="https://www.cee.kerala.gov.in/" target="_blank">cee.kerala.gov.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>40</td><td>Kerala CEE Alt</td><td><a class="sl" href="https://cee-kerala.org/" target="_blank">cee-kerala.org</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>41</td><td>Haryana UHSR</td><td><a class="sl" href="http://www.uhsr.ac.in/" target="_blank">uhsr.ac.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>42</td><td>Haryana UG Counselling</td><td><a class="sl" href="https://uhsrugcounselling.com/Notice.aspx" target="_blank">uhsrugcounselling.com</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="fail" class="rf"><td>43</td><td>Haryana DMER</td><td><a class="sl" href="https://dmer.haryana.gov.in/" target="_blank">dmer.haryana.gov.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>—</td><td>07:30</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="MEDIUM" data-s="fail" class="rf"><td>44</td><td>JK BOPEE</td><td><a class="sl" href="https://www.jkbopee.gov.in/" target="_blank">jkbopee.gov.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>—</td><td>07:30</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>45</td><td>Jharkhand JCECEB</td><td><a class="sl" href="https://jceceb.jharkhand.gov.in/" target="_blank">jceceb.jharkhand.gov.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="fail" class="rf"><td>46</td><td>Karnataka CET</td><td><a class="sl" href="https://cetonline.karnataka.gov.in/" target="_blank">cetonline.karnataka.gov.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>—</td><td>07:30</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>47</td><td>Puducherry CENTAC</td><td><a class="sl" href="https://www.centacpuducherry.in/" target="_blank">centacpuducherry.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:30</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>48</td><td>Punjab BFUHS</td><td><a class="sl" href="https://bfuhs.ac.in/" target="_blank">bfuhs.ac.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:30</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>49</td><td>TN Med Selection</td><td><a class="sl" href="https://tnmedicalselection.net/" target="_blank">tnmedicalselection.net</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:30</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="fail" class="rf"><td>50</td><td>TN Health</td><td><a class="sl" href="https://tnhealth.tn.gov.in/" target="_blank">tnhealth.tn.gov.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>—</td><td>07:31</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>51</td><td>Telangana KNRUHS</td><td><a class="sl" href="http://knruhs.telangana.gov.in/" target="_blank">knruhs.telangana.gov.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:30</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>52</td><td>Telangana VAHD</td><td><a class="sl" href="https://vahd.telangana.gov.in/" target="_blank">vahd.telangana.gov.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:30</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="fail" class="rf"><td>53</td><td>Telangana PJTSAU</td><td><a class="sl" href="https://www.pjtsau.edu.in/" target="_blank">pjtsau.edu.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>—</td><td>07:30</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="MEDIUM" data-s="fail" class="rf"><td>54</td><td>Tripura DME</td><td><a class="sl" href="https://dme.tripura.gov.in/" target="_blank">dme.tripura.gov.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>—</td><td>07:31</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>55</td><td>UK HNBUMU</td><td><a class="sl" href="http://www.hnbumu.ac.in/" target="_blank">hnbumu.ac.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:30</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>56</td><td>WB MCC</td><td><a class="sl" href="https://wbmcc.nic.in/" target="_blank">wbmcc.nic.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:30</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>57</td><td>Manipur RIMS</td><td><a class="sl" href="http://www.rims.edu.in/secure/" target="_blank">rims.edu.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>58</td><td>Manipur Health Dir</td><td><a class="sl" href="http://manipurhealthdirectorate.mn.gov.in/" target="_blank">manipurhealthdirectorate.mn.gov.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>59</td><td>Odisha DME</td><td><a class="sl" href="http://www.dmetodisha.gov.in/" target="_blank">dmetodisha.gov.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>60</td><td>Odisha DME PG</td><td><a class="sl" href="http://dmetodisha.in/" target="_blank">dmetodisha.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="ok"><td>61</td><td>Odisha JEE</td><td><a class="sl" href="https://odishajee.com/" target="_blank">odishajee.com</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="MEDIUM" data-s="fail" class="rf"><td>62</td><td>Odisha OJEE</td><td><a class="sl" href="https://ojee.nic.in/ojeecmsmbb" target="_blank">ojee.nic.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>—</td><td>07:29</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="MEDIUM" data-s="fail" class="rf"><td>63</td><td>AP NTRUHS</td><td><a class="sl" href="https://drntruhs.ap.nic.in/" target="_blank">drntruhs.ap.nic.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>—</td><td>07:28</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="MEDIUM" data-s="fail" class="rf"><td>64</td><td>AP DRYSR</td><td><a class="sl" href="https://drysr.uhsap.in/index.html" target="_blank">drysr.uhsap.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>—</td><td>07:28</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="MEDIUM" data-s="fail" class="rf"><td>65</td><td>Assam DME</td><td><a class="sl" href="https://dme.assam.gov.in/" target="_blank">dme.assam.gov.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>—</td><td>07:30</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="MEDIUM" data-s="fail" class="rf"><td>66</td><td>HP DMER (AMRU)</td><td><a class="sl" href="https://amruhp.ac.in/" target="_blank">amruhp.ac.in</a></td><td><span class="pill MEDIUM">MEDIUM</span></td><td>—</td><td>07:30</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>67</td><td>UP Ayush</td><td><a class="sl" href="https://www.upayushcounseling.upsdc.gov.in/" target="_blank">upayushcounseling.upsdc.gov.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="fail" class="rf"><td>68</td><td>MP Ayush Gov</td><td><a class="sl" href="http://ayush.mp.gov.in/" target="_blank">ayush.mp.gov.in</a></td><td><span class="pill LOW">LOW</span></td><td>—</td><td>07:30</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="LOW" data-s="fail" class="rf"><td>69</td><td>Rajasthan BPT RUHS</td><td><a class="sl" href="https://ruhsraj.org/" target="_blank">ruhsraj.org</a></td><td><span class="pill LOW">LOW</span></td><td>—</td><td>07:31</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>70</td><td>Rajasthan Vet RAJUVAS</td><td><a class="sl" href="https://rajuvas.org/" target="_blank">rajuvas.org</a></td><td><span class="pill LOW">LOW</span></td><td>07:30</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>71</td><td>Punjab Vet GADVASU</td><td><a class="sl" href="https://www.gadvasu.in/" target="_blank">gadvasu.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:30</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>72</td><td>Punjab Ayush GRAU</td><td><a class="sl" href="https://grauadmission.smartpad.in/Registration/" target="_blank">grauadmission.smartpad.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:30</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="fail" class="rf"><td>73</td><td>Punjab Ayush GRAU Main</td><td><a class="sl" href="https://www.graupunjab.org/" target="_blank">graupunjab.org</a></td><td><span class="pill LOW">LOW</span></td><td>—</td><td>07:30</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>74</td><td>TN Vet TANUVAS</td><td><a class="sl" href="https://tanuvas.ac.in/" target="_blank">tanuvas.ac.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:30</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>75</td><td>UK Ayush UAU</td><td><a class="sl" href="https://uau.ac.in/" target="_blank">uau.ac.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:30</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>76</td><td>UK Vet GBPUAT</td><td><a class="sl" href="https://www.gbpuat.ac.in/" target="_blank">gbpuat.ac.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:30</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="fail" class="rf"><td>77</td><td>UK Vet Council</td><td><a class="sl" href="https://ahd.uk.gov.in/pages/display/133-uttarakhand-veterinary-council" target="_blank">ahd.uk.gov.in</a></td><td><span class="pill LOW">LOW</span></td><td>—</td><td>07:30</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>78</td><td>UP Vet UPVETUNIV</td><td><a class="sl" href="https://upvetuniv.edu.in/" target="_blank">upvetuniv.edu.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:30</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>79</td><td>WB Vet WBUAFSCE</td><td><a class="sl" href="https://www.wbuafsce.org/" target="_blank">wbuafsce.org</a></td><td><span class="pill LOW">LOW</span></td><td>07:30</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>80</td><td>WB BPT WBJEEB</td><td><a class="sl" href="https://wbjeeb.in/" target="_blank">wbjeeb.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:30</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="fail" class="rf"><td>81</td><td>Meghalaya NEIGRIHMS</td><td><a class="sl" href="https://neigrihms.gov.in" target="_blank">neigrihms.gov.in</a></td><td><span class="pill LOW">LOW</span></td><td>—</td><td>07:30</td><td class="shi">2</td><td><span class="fail-d">Re-checking</span></td></tr>
-<tr data-p="LOW" data-s="fail" class="rf"><td>82</td><td>Mizoram Higher Ed</td><td><a class="sl" href="https://highereducation.mizoram.gov.in" target="_blank">highereducation.mizoram.gov.in</a></td><td><span class="pill LOW">LOW</span></td><td>—</td><td>07:29</td><td class="shi">2</td><td><span class="fail-d">Re-checking</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>83</td><td>Nagaland DTE</td><td><a class="sl" href="https://dte.nagaland.gov.in/" target="_blank">dte.nagaland.gov.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="fail" class="rf"><td>84</td><td>Odisha Ayush</td><td><a class="sl" href="http://www.ayushodisha.nic.in/" target="_blank">ayushodisha.nic.in</a></td><td><span class="pill LOW">LOW</span></td><td>—</td><td>07:31</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="LOW" data-s="fail" class="rf"><td>85</td><td>Odisha Vet OUAT</td><td><a class="sl" href="http://www.ouat.nic.in/" target="_blank">ouat.nic.in</a></td><td><span class="pill LOW">LOW</span></td><td>—</td><td>07:31</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="LOW" data-s="fail" class="rf"><td>86</td><td>Odisha DAHVS</td><td><a class="sl" href="https://dahvs.odisha.gov.in/" target="_blank">dahvs.odisha.gov.in</a></td><td><span class="pill LOW">LOW</span></td><td>—</td><td>07:31</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>87</td><td>Tripura BPT TIPS</td><td><a class="sl" href="https://tipsindia.co.in/bpt/" target="_blank">tipsindia.co.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:30</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="fail" class="rf"><td>88</td><td>Tripura TVC Vet</td><td><a class="sl" href="https://tvc.tripura.gov.in/" target="_blank">tvc.tripura.gov.in</a></td><td><span class="pill LOW">LOW</span></td><td>—</td><td>07:31</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="LOW" data-s="fail" class="rf"><td>89</td><td>Tripura ARDD</td><td><a class="sl" href="https://ardd.tripura.gov.in/college_home" target="_blank">ardd.tripura.gov.in</a></td><td><span class="pill LOW">LOW</span></td><td>—</td><td>07:31</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="LOW" data-s="fail" class="rf"><td>90</td><td>Telangana Vet TSVU</td><td><a class="sl" href="https://tsvu.nic.in/" target="_blank">tsvu.nic.in</a></td><td><span class="pill LOW">LOW</span></td><td>—</td><td>07:31</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>91</td><td>Karnataka Vet KVAFSU</td><td><a class="sl" href="https://www.kvafsu.edu.in/" target="_blank">kvafsu.edu.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="fail" class="rf"><td>92</td><td>AN College Admission</td><td><a class="sl" href="https://collegeadmission.andaman.gov.in/" target="_blank">collegeadmission.andaman.gov.in</a></td><td><span class="pill LOW">LOW</span></td><td>—</td><td>07:28</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>93</td><td>AR DHTE</td><td><a class="sl" href="http://apdhte.nic.in/" target="_blank">apdhte.nic.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="fail" class="rf"><td>94</td><td>Assam Ayush</td><td><a class="sl" href="https://ayush.assam.gov.in/" target="_blank">ayush.assam.gov.in</a></td><td><span class="pill LOW">LOW</span></td><td>—</td><td>07:30</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>95</td><td>Assam Vet</td><td><a class="sl" href="https://veterinary.assam.gov.in/" target="_blank">veterinary.assam.gov.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>96</td><td>Bihar BASU Vet</td><td><a class="sl" href="https://www.basu.org.in/" target="_blank">basu.org.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>97</td><td>CG DME</td><td><a class="sl" href="http://cgdme.co.in/" target="_blank">cgdme.co.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="fail" class="rf"><td>98</td><td>CG Ayush</td><td><a class="sl" href="https://cgayush.admissions.nic.in/" target="_blank">cgayush.admissions.nic.in</a></td><td><span class="pill LOW">LOW</span></td><td>—</td><td>07:29</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="LOW" data-s="fail" class="rf"><td>99</td><td>DD VBCH</td><td><a class="sl" href="https://vbch.dnh.nic.in/" target="_blank">vbch.dnh.nic.in</a></td><td><span class="pill LOW">LOW</span></td><td>—</td><td>07:30</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="LOW" data-s="fail" class="rf"><td>100</td><td>Goa DTE</td><td><a class="sl" href="http://dte.goa.gov.in/" target="_blank">dte.goa.gov.in</a></td><td><span class="pill LOW">LOW</span></td><td>—</td><td>07:30</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>101</td><td>Gujarat Vet GVC</td><td><a class="sl" href="https://gvc.org.in/" target="_blank">gvc.org.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>102</td><td>Haryana Ayush SKAU</td><td><a class="sl" href="https://skau.ac.in/" target="_blank">skau.ac.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>103</td><td>Haryana Vet LUVAS</td><td><a class="sl" href="https://www.luvas.edu.in/" target="_blank">luvas.edu.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>104</td><td>Haryana BPT</td><td><a class="sl" href="http://haryanaphysiotherapycouncil.com/" target="_blank">haryanaphysiotherapycouncil.com</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>105</td><td>HP University</td><td><a class="sl" href="https://www.hpuniv.ac.in/" target="_blank">hpuniv.ac.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>106</td><td>HP IGMC PG</td><td><a class="sl" href="http://www.igmcshimla.edu.in/" target="_blank">igmcshimla.edu.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>107</td><td>HP MMU Solan</td><td><a class="sl" href="https://www.mmusolan.org/" target="_blank">mmusolan.org</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>108</td><td>HP Admissions</td><td><a class="sl" href="https://admissions.hpushimla.in/" target="_blank">admissions.hpushimla.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="fail" class="rf"><td>109</td><td>HP HillAgric Vet</td><td><a class="sl" href="http://hillagric.ac.in/" target="_blank">hillagric.ac.in</a></td><td><span class="pill LOW">LOW</span></td><td>—</td><td>07:30</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>110</td><td>Jamia Hamdard</td><td><a class="sl" href="http://jamiahamdard.edu/" target="_blank">jamiahamdard.edu</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>111</td><td>ESIC</td><td><a class="sl" href="https://www.esic.nic.in/" target="_blank">esic.nic.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>112</td><td>Chandigarh GMCH</td><td><a class="sl" href="https://gmch.gov.in/" target="_blank">gmch.gov.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>113</td><td>MP Ayush AIUG</td><td><a class="sl" href="https://ayush.mponline.gov.in/Portal/Services/AYUSH/AIUG/Index.aspx" target="_blank">ayush.mponline.gov.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>114</td><td>MP Vet NDVSU</td><td><a class="sl" href="https://www.ndvsu.org/" target="_blank">ndvsu.org</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="fail" class="rf"><td>115</td><td>MP Vet Crisp</td><td><a class="sl" href="http://crisponlineservices.com/" target="_blank">crisponlineservices.com</a></td><td><span class="pill LOW">LOW</span></td><td>—</td><td>07:30</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>116</td><td>Maharashtra Vet MAFSU</td><td><a class="sl" href="https://mafsu.ac.in/" target="_blank">mafsu.ac.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>117</td><td>Delhi Ayush Unani</td><td><a class="sl" href="http://www.fmsc.ac.in/unani.htm" target="_blank">fmsc.ac.in/unani</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>118</td><td>Haryana PG Online</td><td><a class="sl" href="https://hry.online-counselling.co.in/" target="_blank">hry.online-counselling.co.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>119</td><td>Haryana SKAU Online</td><td><a class="sl" href="https://skau.online-counselling.co.in/admissions/onboardingHomePage" target="_blank">skau.online-counselling.co.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>120</td><td>UP DGME Main</td><td><a class="sl" href="http://www.dgme.up.gov.in/" target="_blank">www.dgme.up.gov.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>121</td><td>FMSC</td><td><a class="sl" href="http://www.fmsc.ac.in/" target="_blank">fmsc.ac.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>122</td><td>CG Health Ayush</td><td><a class="sl" href="https://cghealth.nic.in/ehealth/dishm/councellinginfo.html" target="_blank">cghealth.nic.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>123</td><td>CG Vet CGKV</td><td><a class="sl" href="https://cgkv.ac.in/" target="_blank">cgkv.ac.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>124</td><td>DD NAMO Meri</td><td><a class="sl" href="https://namomeriadmission.in/" target="_blank">namomeriadmission.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>125</td><td>DD NAMO DNHDD</td><td><a class="sl" href="http://namomeridnhdd.in/home-page" target="_blank">namomeridnhdd.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>126</td><td>Goa GMC</td><td><a class="sl" href="https://www.goa.gov.in/department/goa-medical-college-and-hospital/" target="_blank">goa.gov.in/gmc</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="fail" class="rf"><td>127</td><td>AP Vet SVVU</td><td><a class="sl" href="https://svvu.edu.in/" target="_blank">svvu.edu.in</a></td><td><span class="pill LOW">LOW</span></td><td>—</td><td>07:29</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="LOW" data-s="fail" class="rf"><td>128</td><td>Puducherry River Vet</td><td><a class="sl" href="https://river.edu.in/admission-procedure" target="_blank">river.edu.in</a></td><td><span class="pill LOW">LOW</span></td><td>—</td><td>07:30</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>129</td><td>IPU Schedule</td><td><a class="sl" href="https://ipu.admissions.nic.in/schedule-notices/" target="_blank">ipu schedule notices</a></td><td><span class="pill LOW">LOW</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>130</td><td>BHU Main</td><td><a class="sl" href="https://www.bhu.ac.in/Site/Home/1_2_16_Main-Site" target="_blank">bhu.ac.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:28</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="ok"><td>131</td><td>Haryana PG Counselling</td><td><a class="sl" href="https://hry.online-counselling.co.in/" target="_blank">hry.online-counselling.co.in</a></td><td><span class="pill LOW">LOW</span></td><td>07:29</td><td>—</td><td class="s0">0</td><td><span class="ok-d">Online</span></td></tr>
-<tr data-p="LOW" data-s="fail" class="rf"><td>132</td><td>Odisha Vet OUAT</td><td><a class="sl" href="http://www.ouat.nic.in/" target="_blank">ouat.nic.in</a></td><td><span class="pill LOW">LOW</span></td><td>—</td><td>07:31</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-<tr data-p="LOW" data-s="fail" class="rf"><td>133</td><td>Odisha DAHVS</td><td><a class="sl" href="https://dahvs.odisha.gov.in/" target="_blank">dahvs.odisha.gov.in</a></td><td><span class="pill LOW">LOW</span></td><td>—</td><td>07:31</td><td class="shi">2</td><td><span class="fail-d">Failed</span></td></tr>
-    </tbody>
-   </table></div>
-  </div>
- </div><!-- /main -->
+<tr><td>Rajasthan PG NEET</td><td>https://www.rajpgneet2024.org/</td>
+<td>7</td><td>connect: ConnectError</td></tr>
 
- <!-- ── SIDEBAR ── -->
- <div class="sidebar">
-  <p class="sidebar-title">📚 NEET Counselling Courses</p>
+<tr><td>Rajasthan MDS</td><td>https://www.rajmdsneet2024.org/</td>
+<td>7</td><td>connect: ConnectError</td></tr>
 
-  <!-- Product 1: ONE PRO -->
-  <a class="prod-card" href="https://www.adda247.com/product-onlineliveclasses/106726/neet-counselling-one-pro-aiq-state-deemed-private-medical-colleges-online-coaching?productId=106727" target="_blank">
-   <img src="https://storeimages.adda247.com/ONEPROPDP1777893886.png"
-        alt="NEET Counselling ONE PRO"
-        onerror="this.src='https://placehold.co/300x160/0f1f5c/ffffff?text=ONE+PRO+Counselling'">
-   <div class="pc-body">
-    <div class="pc-tags">
-     <span class="pc-tag rec">⭐ Recommended</span>
-     <span class="pc-tag disc">🔥 50% Off Today</span>
-     <span class="pc-tag lim">⏳ Limited Seats</span>
-    </div>
-    <div class="pc-name">NEET 2026 Counselling — ONE PRO<br>AIQ, State, Deemed &amp; Private Colleges</div>
-    <div class="pc-btn">Explore Course →</div>
-   </div>
-  </a>
+<tr><td>Rajasthan Education</td><td>https://educationsector.rajasthan.gov.in/</td>
+<td>7</td><td>connect: ConnectError</td></tr>
 
-  <!-- Product 2: Standard Counselling -->
-  <a class="prod-card" href="https://www.adda247.com/product-onlineliveclasses/106720/neet-counselling-aiq-state-deemed-private-medical-colleges-online-coaching?productId=106721" target="_blank">
-   <img src="https://st.adda247.com/https://storeimages.adda247.com/OnePDP1783161279.webp"
-        alt="NEET Counselling Standard"
-        onerror="this.src='https://placehold.co/300x160/1a4fad/ffffff?text=NEET+Counselling'">
-   <div class="pc-body">
-    <div class="pc-tags">
-     <span class="pc-tag val">💰 Value Pack</span>
-     <span class="pc-tag disc">🔥 50% Off Today</span>
-     <span class="pc-tag lim">⏳ Limited Seats</span>
-    </div>
-    <div class="pc-name">NEET 2026 Counselling<br>AIQ, State, Deemed &amp; Private Colleges</div>
-    <div class="pc-btn">Explore Course →</div>
-   </div>
-  </a>
+<tr><td>CPS Mumbai</td><td>https://www.cpsmumbai.org/Default</td>
+<td>7</td><td>HTTP 404</td></tr>
 
-  <!-- Call CTA -->
-  <div class="call-box">
-   <div class="cb-label">📞 Counselling Query?</div>
-   <a class="cb-num" href="tel:7042578247">70425 78247</a>
-   <div class="cb-sub">Mon – Sun &nbsp;|&nbsp; 7:00 AM – 11:00 PM</div>
-  </div>
+<tr><td>AFMC</td><td>https://www.afmc.nic.in/</td>
+<td>7</td><td>protocol: Server disconnected without sending a response.</td></tr>
 
-  <!-- YouTube -->
-  <a class="yt-link" href="https://www.youtube.com/@AddaNEETCounselling" target="_blank">
-   <div class="yt-icon">
-    <svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.8 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
-   </div>
-   <div>
-    <div class="yt-text">Explore Counselling Videos</div>
-    <div class="yt-sub">AddaNEET Counselling · YouTube</div>
-   </div>
-  </a>
+<tr><td>AN ANIIMS</td><td>http://andssw1.and.nic.in/aniims/</td>
+<td>7</td><td>HTTP 403</td></tr>
 
-  <!-- Promo Banner -->
-  <div class="promo-banner">
-   <h3>🎯 Expert Counselling Support</h3>
-   <p>1-on-1 guidance · Seat Matrix · College Preference List · Document Help</p>
-   <a href="https://www.adda247.com/neet-counselling-exam-kit?examCategoryMappingId=IPM" target="_blank">Browse All NEET Courses →</a>
-  </div>
+<tr><td>AP DRYSR</td><td>https://drysr.uhsap.in/index.html</td>
+<td>7</td><td>connect: ConnectError</td></tr>
 
-  <!-- Quick stats -->
-  <div style="background:#fff;border-radius:14px;border:1px solid var(--border);padding:1rem;font-size:.82rem;color:#334155">
-   <div style="font-weight:800;margin-bottom:.6rem;font-size:.85rem">📊 Monitor Stats</div>
-   <div style="display:flex;flex-direction:column;gap:.4rem">
-    <div style="display:flex;justify-content:space-between"><span>Sites monitored</span><b>133</b></div>
-    <div style="display:flex;justify-content:space-between"><span>Scan frequency</span><b>30 min</b></div>
-    <div style="display:flex;justify-content:space-between"><span>HIGH priority sites</span><b>21</b></div>
-    <div style="display:flex;justify-content:space-between"><span>Alerts via</span><b>Telegram</b></div>
-    <div style="display:flex;justify-content:space-between"><span>Daily digest</span><b>Email 8:30 AM</b></div>
-   </div>
-  </div>
- </div><!-- /sidebar -->
+<tr><td>AP NTRUHS</td><td>http://ntruhs.ap.nic.in/</td>
+<td>7</td><td>connect: ConnectError</td></tr>
 
-</div><!-- /page -->
+<tr><td>CG Vet CGKV</td><td>https://cgkv.ac.in/</td>
+<td>7</td><td>connect: ConnectError</td></tr>
 
-<footer>
- NEET Counselling Monitor · 133 official sites · Auto-scans every 30 min via GitHub Actions<br>
- <strong style="color:var(--red)">⚠ ~40% failure rate is normal — many government sites block automated traffic.</strong>
-</footer>
+<tr><td>DD NAMO Meri</td><td>https://namomeriadmission.in/</td>
+<td>7</td><td>HTTP 503</td></tr>
 
-<script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwKbddIRPgPQABNskrw0qij4SR7m22-0rXGMzj6XwCuWw9p6_5bqpAe6fYT0kyLdB6YLA/exec';
-let eVer = false, curStep = 1;
+<tr><td>FMSC</td><td>http://www.fmsc.ac.in/</td>
+<td>7</td><td>connect: ConnectError</td></tr>
 
-window.addEventListener('DOMContentLoaded', () => {
-  try {
-    const u = JSON.parse(localStorage.getItem('neet_user') || '{}');
-    if (u.email && u.verified) { closeModal(); return; }
-  } catch(e) {}
-});
+<tr><td>Delhi Ayush Unani</td><td>http://www.fmsc.ac.in/unani.htm</td>
+<td>7</td><td>connect: ConnectError</td></tr>
 
-function showModal() { document.getElementById('mo').style.display = 'flex'; }
-function closeModal() { document.getElementById('mo').style.display = 'none'; }
+<tr><td>AN College Admission</td><td>https://collegeadmission.andaman.gov.in/</td>
+<td>7</td><td>connect: ConnectError</td></tr>
 
-function goS(n) {
-  document.getElementById('s' + curStep).classList.remove('active');
-  document.getElementById('s' + n).classList.add('active');
-  for (let i = 1; i <= 3; i++) {
-    const d = document.getElementById('d' + i);
-    d.className = 'step-dot' + (i < n ? ' done' : i === n ? ' active' : '');
-  }
-  curStep = n;
-}
+<tr><td>Haryana UG Counselling</td><td>https://uhsrugcounselling.com/Notice.aspx</td>
+<td>7</td><td>HTTP 503</td></tr>
 
-function s1next() {
-  const name = document.getElementById('f-name').value.trim();
-  const phone = document.getElementById('f-phone').value.trim();
-  let ok = true;
-  if (!name) { show('e-name', 'Please enter your name'); ok = false; } else hide('e-name');
-  if (!/^\d{10}$/.test(phone)) { show('e-phone', 'Enter a valid 10-digit number'); ok = false; } else hide('e-phone');
-  if (ok) goS(2);
-}
+<tr><td>HP MMU Solan</td><td>https://www.mmusolan.org/</td>
+<td>7</td><td>HTTP 403</td></tr>
 
-async function sendOTP() {
-  const email = document.getElementById('f-email').value.trim();
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { show('e-email', 'Enter a valid email'); return; }
-  hide('e-email');
-  const btn = document.getElementById('btn-eotp');
-  btn.disabled = true; btn.textContent = 'Sending…';
-  try {
-    await fetch(APPS_SCRIPT_URL, {
-      method: 'POST', mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'send_otp', email })
-    });
-  } catch(e) {}
-  btn.textContent = 'Resend'; btn.disabled = false;
-  document.getElementById('otp-field').style.display = 'block';
-  show('h-sent');
-  setTimeout(() => show('h-resend'), 30000);
-}
+<tr><td>Haryana BPT</td><td>http://haryanaphysiotherapycouncil.com/</td>
+<td>7</td><td>connect: ConnectError</td></tr>
 
-async function verOTP() {
-  const email = document.getElementById('f-email').value.trim();
-  const otp = document.getElementById('f-otp').value.trim();
-  if (!otp || otp.length < 6) { show('e-otp', 'Enter the 6-digit OTP'); return; }
-  const vb = document.getElementById('btn-ver');
-  vb.disabled = true; vb.textContent = 'Checking…';
-  try {
-    const res = await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'verify_otp', email, otp })
-    });
-    const d = await res.json();
-    if (d.success) {
-      eVer = true; show('h-ver'); hide('e-otp');
-      document.getElementById('btn-s2n').disabled = false;
-    } else {
-      show('e-otp', d.reason === 'expired' ? 'OTP expired. Resend.' : 'Incorrect OTP. Try again.');
-      vb.disabled = false; vb.textContent = 'Verify';
-    }
-  } catch(e) {
-    eVer = true; show('h-ver');
-    document.getElementById('btn-s2n').disabled = false;
-  }
-}
+<tr><td>UP NEET</td><td>https://upneet.gov.in/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
 
-function s2next() { if (eVer) goS(3); else show('e-email', 'Please verify your email first'); }
+<tr><td>UP DGME</td><td>http://dgme.up.gov.in/Welcome/counselling</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
 
-async function submit() {
-  const state = document.getElementById('f-state').value;
-  if (!state) { show('e-state', 'Please select your state'); return; }
-  const name = document.getElementById('f-name').value.trim();
-  const phone = document.getElementById('f-phone').value.trim();
-  const email = document.getElementById('f-email').value.trim();
-  const btn = document.getElementById('btn-sub');
-  btn.disabled = true; btn.textContent = 'Saving…';
-  try {
-    await fetch(APPS_SCRIPT_URL, {
-      method: 'POST', mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'save_lead', name, phone, email, state, ts: new Date().toISOString() })
-    });
-  } catch(e) {}
-  localStorage.setItem('neet_user', JSON.stringify({ name, phone, email, state, verified: true }));
-  document.getElementById('mbody').style.display = 'none';
-  document.getElementById('msuccess').style.display = 'block';
-}
+<tr><td>UP DGME Main</td><td>http://www.dgme.up.gov.in/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
 
-function show(id, msg) { const e = document.getElementById(id); if (msg) e.textContent = msg; e.style.display = 'block'; }
-function hide(id) { document.getElementById(id).style.display = 'none'; }
+<tr><td>UP Ayush</td><td>https://www.upayushcounseling.upsdc.gov.in/default.aspx</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
 
-let af = 'all';
-function setF(f, b) { af = f; document.querySelectorAll('.fb button').forEach(x => x.classList.remove('act')); b.classList.add('act'); ap(); }
-function ap() {
-  const q = document.getElementById('searchBox').value.toLowerCase();
-  document.querySelectorAll('#T tbody tr').forEach(r => {
-    const ok = (!q || r.textContent.toLowerCase().includes(q)) &&
-      (af==='all' || (af==='ok'&&r.dataset.s==='ok') || (af==='fail'&&r.dataset.s==='fail') || (af==='high'&&r.dataset.p==='HIGH'));
-    r.style.display = ok ? '' : 'none';
-  });
-}
-</script>
-</body>
-</html>
+<tr><td>MP MedEd</td><td>https://medicaleducation.mp.gov.in/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+<tr><td>ESIC</td><td>https://www.esic.nic.in/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+<tr><td>Mizoram DHTE</td><td>https://dhte.mizoram.gov.in/</td>
+<td>7</td><td>HTTP 403</td></tr>
+
+<tr><td>AP Vet SVVU</td><td>https://svvu.edu.in/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+<tr><td>Odisha OJEE</td><td>https://ojee.nic.in/ojeecmsmbb</td>
+<td>7</td><td>HTTP 404</td></tr>
+
+<tr><td>Assam DME</td><td>https://dme.assam.gov.in/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+<tr><td>Assam Ayush</td><td>https://ayush.assam.gov.in/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+<tr><td>Puducherry River Vet</td><td>https://river.edu.in/admission-procedure</td>
+<td>7</td><td>HTTP 404</td></tr>
+
+<tr><td>Punjab Ayush GRAU</td><td>https://www.graupunjab.org/</td>
+<td>7</td><td>connect: ConnectError</td></tr>
+
+<tr><td>DD VBCH</td><td>https://vbch.dnh.nic.in/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+<tr><td>Goa DTE</td><td>http://dte.goa.gov.in/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+<tr><td>Haryana DMER</td><td>https://dmer.haryana.gov.in/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+<tr><td>Telangana PJTSAU</td><td>https://www.pjtsau.edu.in/</td>
+<td>7</td><td>connect: ConnectError</td></tr>
+
+<tr><td>HP DMER</td><td>http://www.hp.gov.in/hpdmer/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+<tr><td>HP HillAgric Vet</td><td>http://hillagric.ac.in/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+<tr><td>JK BOPEE</td><td>https://www.jkbopee.gov.in/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+<tr><td>UK Vet Council</td><td>https://ahd.uk.gov.in/pages/display/133-uttarakhand-veterinary-council</td>
+<td>7</td><td>HTTP 404</td></tr>
+
+<tr><td>Karnataka CET</td><td>https://cetonline.karnataka.gov.in/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+<tr><td>MP Ayush Gov</td><td>http://ayush.mp.gov.in/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+<tr><td>MP Vet Crisp</td><td>http://crisponlineservices.com/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+<tr><td>Meghalaya Health</td><td>https://meghealth.gov.in/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+<tr><td>Odisha Ayush</td><td>http://www.ayushodisha.nic.in/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+<tr><td>Odisha Vet OUAT</td><td>http://www.ouat.nic.in/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+<tr><td>Odisha DAHVS</td><td>https://dahvs.odisha.gov.in/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+<tr><td>Rajasthan BPT RUHS</td><td>https://ruhsraj.org/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+<tr><td>TN Health</td><td>https://tnhealth.tn.gov.in/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+<tr><td>Telangana Vet TSVU</td><td>https://tsvu.nic.in/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+<tr><td>Tripura DME</td><td>https://dme.tripura.gov.in/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+<tr><td>Tripura TVC Vet</td><td>https://tvc.tripura.gov.in/</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+<tr><td>Tripura ARDD</td><td>https://ardd.tripura.gov.in/college_home</td>
+<td>7</td><td>connect: ConnectTimeout</td></tr>
+
+</table>
+
+
+<h2>Recent changes (30)</h2>
+<table><tr><th>When</th><th>Site</th><th>Priority</th><th>Type</th><th>Summary</th></tr>
+
+<tr class="">
+  <td>2026-07-25T12:01:10+00:00</td><td>Punjab Vet GADVASU</td><td>LOW</td>
+  <td>notice_text_added</td><td>New content: news & events upcoming events jul 25 2026 college of dairy and food science technology organizes tree plantation drive jul 24 2026 vet varsity organizes exposure visit under harvest 2.0 j</td>
+</tr>
+
+<tr class="">
+  <td>2026-07-25T12:00:34+00:00</td><td>HP University</td><td>MEDIUM</td>
+  <td>notice_text_added</td><td>New content: admission notice (non-subsidized seats) for admission to m.a. sanskrit...</td>
+</tr>
+
+<tr class="">
+  <td>2026-07-25T12:00:34+00:00</td><td>HP University</td><td>MEDIUM</td>
+  <td>notice_text_added</td><td>New content: admission notice for various ug, pg and diploma courses for academic year 2026-27 beginning from august, 2026...</td>
+</tr>
+
+<tr class="">
+  <td>2026-07-25T12:00:34+00:00</td><td>HP University</td><td>MEDIUM</td>
+  <td>notice_text_added</td><td>New content: counselling notice for admission to m.sc chemistry against vacant seats under subsidized & non-subsidized seats , hpu, s...</td>
+</tr>
+
+<tr class="">
+  <td>2026-07-25T12:00:34+00:00</td><td>HP University</td><td>MEDIUM</td>
+  <td>notice_text_added</td><td>New content: 1st merit list for admission to m.a. in yoga studies, 1st semester for academic session 2026-27...</td>
+</tr>
+
+<tr class="">
+  <td>2026-07-25T12:00:34+00:00</td><td>HP University</td><td>MEDIUM</td>
+  <td>notice_text_added</td><td>New content: 25th jul, 2026 counselling notice for admission to m.sc chemistry against vacant seats under subsidized & non-subsidized seats , hpu, s... size:(1mb) read more 25th jul, 2026 admission no</td>
+</tr>
+
+<tr class="">
+  <td>2026-07-25T12:00:34+00:00</td><td>HP University</td><td>MEDIUM</td>
+  <td>pdf_removed</td><td>PDF removed: https://www.hpuniv.ac.in/upload/press_release/6a648fa05acf8physicsinduction.pdf</td>
+</tr>
+
+<tr class="">
+  <td>2026-07-25T12:00:34+00:00</td><td>HP University</td><td>MEDIUM</td>
+  <td>pdf_removed</td><td>PDF removed: https://www.hpuniv.ac.in/upload/press_release/6a6491ad8cd31mttm.pdf</td>
+</tr>
+
+<tr class="">
+  <td>2026-07-25T12:00:34+00:00</td><td>HP University</td><td>MEDIUM</td>
+  <td>pdf_removed</td><td>PDF removed: https://www.hpuniv.ac.in/upload/press_release/6a6495269975a2ndmeritlistofhpunonsubsidizedseatandcri.pdf</td>
+</tr>
+
+<tr class="">
+  <td>2026-07-25T12:00:34+00:00</td><td>HP University</td><td>MEDIUM</td>
+  <td>pdf_removed</td><td>PDF removed: https://www.hpuniv.ac.in/upload/press_release/6a648bb7d4065m.a.polscience.pdf</td>
+</tr>
+
+<tr class="">
+  <td>2026-07-25T12:00:34+00:00</td><td>HP University</td><td>MEDIUM</td>
+  <td>pdf_added</td><td>New PDF: https://www.hpuniv.ac.in/upload/press_release/6a649ac272c61admissionnotice.pdf</td>
+</tr>
+
+<tr class="">
+  <td>2026-07-25T12:00:34+00:00</td><td>HP University</td><td>MEDIUM</td>
+  <td>pdf_added</td><td>New PDF: https://www.hpuniv.ac.in/upload/press_release/6a64997de8c2byoga.pdf</td>
+</tr>
+
+<tr class="">
+  <td>2026-07-25T12:00:34+00:00</td><td>HP University</td><td>MEDIUM</td>
+  <td>pdf_added</td><td>New PDF: https://www.hpuniv.ac.in/upload/press_release/6a6498318a2a7admissionnonsubsidizedsanskrit.pdf</td>
+</tr>
+
+<tr class="">
+  <td>2026-07-25T12:00:34+00:00</td><td>HP University</td><td>MEDIUM</td>
+  <td>pdf_added</td><td>New PDF: https://www.hpuniv.ac.in/upload/press_release/6a64a388b51decounsellingform.scchemistry1stsemestersubsidizedandnonsubsidized202627session.pdf</td>
+</tr>
+
+<tr class="high">
+  <td>2026-07-25T11:59:43+00:00</td><td>Bihar BCECE</td><td>HIGH</td>
+  <td>notice_text_added</td><td>New content: latest updates notice for offline mop-up counselling of iticat-2026 (adv. no. bceceb(iticat)-2026/10 dated 25.07.2026) details of offline mop-up counselling of iticat-2026 (adv. no. bcece</td>
+</tr>
+
+<tr class="high">
+  <td>2026-07-25T11:59:43+00:00</td><td>Bihar BCECE</td><td>HIGH</td>
+  <td>pdf_removed</td><td>PDF removed: https://bceceboard.bihar.gov.in/pdf_result/jr25_res_revised.pdf</td>
+</tr>
+
+<tr class="high">
+  <td>2026-07-25T11:59:43+00:00</td><td>Bihar BCECE</td><td>HIGH</td>
+  <td>pdf_removed</td><td>PDF removed: https://bceceboard.bihar.gov.in/pdf_adv/adv_dcece26_01.pdf</td>
+</tr>
+
+<tr class="high">
+  <td>2026-07-25T11:59:43+00:00</td><td>Bihar BCECE</td><td>HIGH</td>
+  <td>pdf_removed</td><td>PDF removed: https://bceceboard.bihar.gov.in/pdf_adv/adv_dcece26_02.pdf</td>
+</tr>
+
+<tr class="high">
+  <td>2026-07-25T11:59:43+00:00</td><td>Bihar BCECE</td><td>HIGH</td>
+  <td>pdf_removed</td><td>PDF removed: https://bceceboard.bihar.gov.in/pdf_adv/adv_dle26_02.pdf</td>
+</tr>
+
+<tr class="high">
+  <td>2026-07-25T11:59:43+00:00</td><td>Bihar BCECE</td><td>HIGH</td>
+  <td>pdf_removed</td><td>PDF removed: https://bceceboard.bihar.gov.in/pdf_adv/adv_dle26_01.pdf</td>
+</tr>
+
+<tr class="high">
+  <td>2026-07-25T11:59:43+00:00</td><td>Bihar BCECE</td><td>HIGH</td>
+  <td>pdf_added</td><td>New PDF: https://bceceboard.bihar.gov.in/pdf_adv/adv_iticat26_09.pdf</td>
+</tr>
+
+<tr class="high">
+  <td>2026-07-25T11:59:43+00:00</td><td>Bihar BCECE</td><td>HIGH</td>
+  <td>pdf_added</td><td>New PDF: https://bceceboard.bihar.gov.in/pdf_adv/adv_bcece26_09.pdf</td>
+</tr>
+
+<tr class="high">
+  <td>2026-07-25T11:59:43+00:00</td><td>Bihar BCECE</td><td>HIGH</td>
+  <td>pdf_added</td><td>New PDF: https://bceceboard.bihar.gov.in/pdf_adv/adv_bcece26_08.pdf</td>
+</tr>
+
+<tr class="high">
+  <td>2026-07-25T11:59:43+00:00</td><td>Bihar BCECE</td><td>HIGH</td>
+  <td>pdf_added</td><td>New PDF: https://bceceboard.bihar.gov.in/pdf_seat/bc_pcm26_sm.pdf</td>
+</tr>
+
+<tr class="high">
+  <td>2026-07-25T11:59:43+00:00</td><td>Bihar BCECE</td><td>HIGH</td>
+  <td>pdf_added</td><td>New PDF: https://bceceboard.bihar.gov.in/pdf_adv/adv_iticat26_10.pdf</td>
+</tr>
+
+<tr class="">
+  <td>2026-07-25T11:59:42+00:00</td><td>AMU</td><td>MEDIUM</td>
+  <td>notice_removed</td><td>Notice link removed: http://www.amucontrollerexams.com/page/view/schedule-of-bums-final-professional-batch-2020-old-course-1784724818</td>
+</tr>
+
+<tr class="">
+  <td>2026-07-25T11:59:42+00:00</td><td>AMU</td><td>MEDIUM</td>
+  <td>notice_added</td><td>New notice link: http://www.amucontrollerexams.com/page/view/revised-counselling-cum-admission-schedule-for-admission-to-llm-courses-2026-27-1784977384</td>
+</tr>
+
+<tr class="">
+  <td>2026-07-25T10:52:37+00:00</td><td>HP University</td><td>MEDIUM</td>
+  <td>notice_text_added</td><td>New content: 25th jul, 2026 2nd merit list of hpu non -subsidized seat and cri... size:(932kb) read more 25th jul, 2026 list of candidates admitted under subsidized seats in master of tourism & travel</td>
+</tr>
+
+<tr class="">
+  <td>2026-07-25T10:52:37+00:00</td><td>HP University</td><td>MEDIUM</td>
+  <td>notice_text_added</td><td>New content: admission notice for non subsidized seats in ma political science for the session 2026-27...</td>
+</tr>
+
+<tr class="">
+  <td>2026-07-25T10:52:37+00:00</td><td>HP University</td><td>MEDIUM</td>
+  <td>notice_text_added</td><td>New content: 2nd merit list of hpu non -subsidized seat and cri...</td>
+</tr>
+
+</table>
+
+<h2>All sites</h2>
+<table><tr><th>Site</th><th>URL</th><th>Last OK</th><th>Last Fail</th><th>Streak</th></tr>
+
+<tr><td>NBE Natboard</td><td>https://www.natboard.edu.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:48:10+00:00</td>
+<td>7</td></tr>
+
+<tr><td>NBE</td><td>https://nbe.edu.in/</td>
+<td class="ok">2026-07-25T13:48:12+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Rajasthan DME</td><td>https://medicaleducation.rajasthan.gov.in/me/#/home/dptHome</td>
+<td class="ok">2026-07-25T13:48:12+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>AACCC Ayush</td><td>https://aaccc.gov.in/</td>
+<td class="ok">2026-07-25T13:48:12+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>NTA</td><td>https://nta.ac.in/</td>
+<td class="ok">2026-07-25T13:48:12+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Rajasthan Ayush</td><td>https://rajugpgayushcounselling.in/</td>
+<td class="ok">2026-07-25T13:48:12+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>MCC</td><td>https://mcc.nic.in/</td>
+<td class="ok">2026-07-25T13:48:12+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>NTA NEET</td><td>https://neet.nta.nic.in/</td>
+<td class="ok">2026-07-25T13:48:11+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>NMC</td><td>https://www.nmc.org.in/</td>
+<td class="ok">2026-07-25T13:49:13+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Bihar BCECE</td><td>https://bceceboard.bihar.gov.in/</td>
+<td class="ok">2026-07-25T13:48:14+00:00</td>
+<td class="">2026-07-25T07:29:23+00:00</td>
+<td>0</td></tr>
+
+<tr><td>Gujarat MedAdm</td><td>http://www.medadmgujarat.org/</td>
+<td class="ok">2026-07-25T13:48:14+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Rajasthan UG NEET</td><td>https://www.rajugneet2024.org/</td>
+<td class="ok">2026-07-25T13:48:11+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>MP DME</td><td>https://dme.mponline.gov.in/</td>
+<td class="ok">2026-07-25T13:48:14+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>MP Ayush</td><td>https://ayush.mponline.gov.in/</td>
+<td class="ok">2026-07-25T13:48:14+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>AIIMS</td><td>https://www.aiimsexams.ac.in/</td>
+<td class="ok">2026-07-25T13:48:15+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>JEE Advanced</td><td>https://jeeadv.ac.in/</td>
+<td class="ok">2026-07-25T13:48:15+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Maharashtra CET 2022</td><td>https://cetcell.mahacet.org/CAP_landing_page_2022/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:48:15+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Maharashtra CET 2023</td><td>https://cetcell.mahacet.org/CAP_landing_page_2023/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:48:15+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Rajasthan PG NEET</td><td>https://www.rajpgneet2024.org/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:48:16+00:00</td>
+<td>7</td></tr>
+
+<tr><td>BHU</td><td>https://bhuonline.in/</td>
+<td class="ok">2026-07-25T13:48:15+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Rajasthan MDS</td><td>https://www.rajmdsneet2024.org/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:48:16+00:00</td>
+<td>7</td></tr>
+
+<tr><td>JIPMER</td><td>https://jipmer.edu.in/</td>
+<td class="ok">2026-07-25T13:48:16+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>AMU</td><td>http://www.amucontrollerexams.com/</td>
+<td class="ok">2026-07-25T13:48:17+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>BHU Main</td><td>https://www.bhu.ac.in/Site/Home/1_2_16_Main-Site</td>
+<td class="ok">2026-07-25T13:48:39+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Rajasthan Education</td><td>https://educationsector.rajasthan.gov.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:48:17+00:00</td>
+<td>7</td></tr>
+
+<tr><td>VCI</td><td>https://vci.admissions.nic.in/</td>
+<td class="ok">2026-07-25T13:48:17+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>JEE Main</td><td>https://jeemain.nta.nic.in/</td>
+<td class="ok">2026-07-25T13:48:15+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>IPU Admissions</td><td>https://ipu.admissions.nic.in/</td>
+<td class="ok">2026-07-25T13:48:18+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>IPU Main</td><td>http://www.ipu.ac.in/</td>
+<td class="ok">2026-07-25T13:48:19+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>FMSC Delhi</td><td>https://fmsc.du.ac.in/</td>
+<td class="ok">2026-07-25T13:48:19+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>IPU Schedule</td><td>https://ipu.admissions.nic.in/schedule-notices/</td>
+<td class="ok">2026-07-25T13:48:19+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>CMC Vellore</td><td>https://admissions.cmcvellore.ac.in/</td>
+<td class="ok">2026-07-25T13:48:20+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>CPS Mumbai</td><td>https://www.cpsmumbai.org/Default</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:48:21+00:00</td>
+<td>7</td></tr>
+
+<tr><td>SMU</td><td>https://smu.edu.in/</td>
+<td class="ok">2026-07-25T13:48:22+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>CMC Ludhiana</td><td>https://www.cmcludhiana.in/</td>
+<td class="ok">2026-07-25T13:48:21+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>AFMC</td><td>https://www.afmc.nic.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:48:23+00:00</td>
+<td>7</td></tr>
+
+<tr><td>AN ANIIMS</td><td>http://andssw1.and.nic.in/aniims/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:48:26+00:00</td>
+<td>7</td></tr>
+
+<tr><td>AP DRYSR</td><td>https://drysr.uhsap.in/index.html</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:48:26+00:00</td>
+<td>7</td></tr>
+
+<tr><td>AFMC DG</td><td>https://www.afmcdg1d.gov.in/</td>
+<td class="ok">2026-07-25T13:48:16+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>AP NTRUHS</td><td>http://ntruhs.ap.nic.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:48:26+00:00</td>
+<td>7</td></tr>
+
+<tr><td>AR DHTE</td><td>http://apdhte.nic.in/</td>
+<td class="ok">2026-07-25T13:48:29+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Assam Veterinary</td><td>https://veterinary.assam.gov.in/</td>
+<td class="ok">2026-07-25T13:48:36+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>PGIMER</td><td>https://pgimer.edu.in/</td>
+<td class="ok">2026-07-25T13:48:40+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>GMCH Chandigarh</td><td>http://www.gmch.gov.in/</td>
+<td class="ok">2026-07-25T13:48:54+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>CG DME</td><td>http://cgdme.co.in/</td>
+<td class="ok">2026-07-25T13:48:42+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>CG Ayush Admissions</td><td>https://cgayush.admissions.nic.in/</td>
+<td class="ok">2026-07-25T13:48:44+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>CG Health</td><td>https://cghealth.nic.in/ehealth/dishm/councellinginfo.html</td>
+<td class="ok">2026-07-25T13:48:45+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Bihar BASU Vet</td><td>https://www.basu.org.in/</td>
+<td class="ok">2026-07-25T13:48:41+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>CG Vet CGKV</td><td>https://cgkv.ac.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:48:50+00:00</td>
+<td>7</td></tr>
+
+<tr><td>DD NAMO Meri</td><td>https://namomeriadmission.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:48:54+00:00</td>
+<td>7</td></tr>
+
+<tr><td>DD NAMO DNHDD</td><td>http://namomeridnhdd.in/home-page</td>
+<td class="ok">2026-07-25T13:48:51+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Goa GMC</td><td>https://www.goa.gov.in/department/goa-medical-college-and-hospital/</td>
+<td class="ok">2026-07-25T13:48:53+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Jamia Hamdard</td><td>http://jamiahamdard.edu/</td>
+<td class="ok">2026-07-25T13:48:34+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Gujarat Vet GVC</td><td>https://gvc.org.in/</td>
+<td class="ok">2026-07-25T13:48:55+00:00</td>
+<td class="">2026-07-25T12:01:22+00:00</td>
+<td>0</td></tr>
+
+<tr><td>FMSC</td><td>http://www.fmsc.ac.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:48:48+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Delhi Ayush Unani</td><td>http://www.fmsc.ac.in/unani.htm</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:48:48+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Haryana UHSR</td><td>http://www.uhsr.ac.in/</td>
+<td class="ok">2026-07-25T13:48:57+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Haryana PG</td><td>https://hry.online-counselling.co.in/</td>
+<td class="ok">2026-07-25T13:48:59+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Haryana Ayush SKAU</td><td>https://skau.ac.in/</td>
+<td class="ok">2026-07-25T13:49:00+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Haryana Ayush Onboard</td><td>https://skau.online-counselling.co.in/admissions/onboardingHomePage</td>
+<td class="ok">2026-07-25T13:49:01+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>AN College Admission</td><td>https://collegeadmission.andaman.gov.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:48:58+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Haryana UG Counselling</td><td>https://uhsrugcounselling.com/Notice.aspx</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:49:00+00:00</td>
+<td>7</td></tr>
+
+<tr><td>HP IGMC PG</td><td>http://www.igmcshimla.edu.in/</td>
+<td class="ok">2026-07-25T13:49:06+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Haryana Vet LUVAS</td><td>https://www.luvas.edu.in/</td>
+<td class="ok">2026-07-25T13:49:05+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>HP MMU Solan</td><td>https://www.mmusolan.org/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:49:06+00:00</td>
+<td>7</td></tr>
+
+<tr><td>HP Admissions</td><td>https://admissions.hpushimla.in/</td>
+<td class="ok">2026-07-25T13:49:07+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Haryana BPT</td><td>http://haryanaphysiotherapycouncil.com/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:49:05+00:00</td>
+<td>7</td></tr>
+
+<tr><td>HP AMRU</td><td>https://amruhp.ac.in/</td>
+<td class="ok">2026-07-25T13:49:09+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>HP University</td><td>https://www.hpuniv.ac.in/</td>
+<td class="ok">2026-07-25T13:49:08+00:00</td>
+<td class="">2026-07-25T09:19:01+00:00</td>
+<td>0</td></tr>
+
+<tr><td>UP NEET</td><td>https://upneet.gov.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:49:15+00:00</td>
+<td>7</td></tr>
+
+<tr><td>UP DGME</td><td>http://dgme.up.gov.in/Welcome/counselling</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:49:15+00:00</td>
+<td>7</td></tr>
+
+<tr><td>UP DGME Main</td><td>http://www.dgme.up.gov.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:49:15+00:00</td>
+<td>7</td></tr>
+
+<tr><td>UP Ayush</td><td>https://www.upayushcounseling.upsdc.gov.in/default.aspx</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:49:15+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Karnataka Vet KVAFSU</td><td>https://www.kvafsu.edu.in/</td>
+<td class="ok">2026-07-25T13:49:16+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Kerala CEE</td><td>https://www.cee.kerala.gov.in/</td>
+<td class="ok">2026-07-25T13:49:16+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>MP MedEd</td><td>https://medicaleducation.mp.gov.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:49:16+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Kerala CEE Alt</td><td>https://cee-kerala.org/</td>
+<td class="ok">2026-07-25T13:49:17+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Jharkhand JCECEB</td><td>https://jceceb.jharkhand.gov.in/</td>
+<td class="ok">2026-07-25T13:49:17+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Maharashtra Vet MAFSU</td><td>https://mafsu.ac.in/</td>
+<td class="ok">2026-07-25T13:49:18+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>MP Ayush AIUG</td><td>https://ayush.mponline.gov.in/Portal/Services/AYUSH/AIUG/Index.aspx</td>
+<td class="ok">2026-07-25T13:49:18+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>ESIC</td><td>https://www.esic.nic.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:49:19+00:00</td>
+<td>7</td></tr>
+
+<tr><td>MP Vet NDVSU</td><td>https://www.ndvsu.org/</td>
+<td class="ok">2026-07-25T13:49:19+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Manipur Health Dir</td><td>http://manipurhealthdirectorate.mn.gov.in/</td>
+<td class="ok">2026-07-25T13:49:20+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Mizoram DHTE</td><td>https://dhte.mizoram.gov.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:49:20+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Manipur RIMS</td><td>http://www.rims.edu.in/secure/</td>
+<td class="ok">2026-07-25T13:49:20+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Odisha DME</td><td>http://www.dmetodisha.gov.in/</td>
+<td class="ok">2026-07-25T13:49:22+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Odisha DME PG</td><td>http://dmetodisha.in/</td>
+<td class="ok">2026-07-25T13:49:23+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Odisha JEE</td><td>https://odishajee.com/</td>
+<td class="ok">2026-07-25T13:49:23+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>AP Vet SVVU</td><td>https://svvu.edu.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:49:26+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Nagaland DTE</td><td>https://dte.nagaland.gov.in/</td>
+<td class="ok">2026-07-25T13:49:27+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Odisha OJEE</td><td>https://ojee.nic.in/ojeecmsmbb</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:49:26+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Assam DME</td><td>https://dme.assam.gov.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:49:31+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Puducherry CENTAC</td><td>https://www.centacpuducherry.in/</td>
+<td class="ok">2026-07-25T13:49:31+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Assam Ayush</td><td>https://ayush.assam.gov.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:49:34+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Punjab BFUHS</td><td>https://bfuhs.ac.in/</td>
+<td class="ok">2026-07-25T13:49:33+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Puducherry River Vet</td><td>https://river.edu.in/admission-procedure</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:49:32+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Punjab Vet GADVASU</td><td>https://www.gadvasu.in/</td>
+<td class="ok">2026-07-25T13:49:34+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Punjab Ayush GRAU Reg</td><td>https://grauadmission.smartpad.in/Registration/</td>
+<td class="ok">2026-07-25T13:49:35+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Rajasthan Vet RAJUVAS</td><td>https://rajuvas.org/</td>
+<td class="ok">2026-07-25T13:49:37+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Punjab Ayush GRAU</td><td>https://www.graupunjab.org/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:49:39+00:00</td>
+<td>7</td></tr>
+
+<tr><td>TN Med Selection</td><td>https://tnmedicalselection.net/</td>
+<td class="ok">2026-07-25T13:49:39+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>DD VBCH</td><td>https://vbch.dnh.nic.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:49:53+00:00</td>
+<td>7</td></tr>
+
+<tr><td>TN Vet TANUVAS</td><td>https://tanuvas.ac.in/</td>
+<td class="ok">2026-07-25T13:49:56+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Telangana KNRUHS</td><td>http://knruhs.telangana.gov.in/</td>
+<td class="ok">2026-07-25T13:50:00+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Goa DTE</td><td>http://dte.goa.gov.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:49:57+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Telangana VAHD</td><td>https://vahd.telangana.gov.in/</td>
+<td class="ok">2026-07-25T13:50:02+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Haryana DMER</td><td>https://dmer.haryana.gov.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:50:01+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Telangana PJTSAU</td><td>https://www.pjtsau.edu.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:50:08+00:00</td>
+<td>7</td></tr>
+
+<tr><td>HP DMER</td><td>http://www.hp.gov.in/hpdmer/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:50:12+00:00</td>
+<td>7</td></tr>
+
+<tr><td>HP HillAgric Vet</td><td>http://hillagric.ac.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:50:14+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Tripura BPT TIPS</td><td>https://tipsindia.co.in/bpt/</td>
+<td class="ok">2026-07-25T13:50:14+00:00</td>
+<td class="">2026-07-25T12:02:49+00:00</td>
+<td>0</td></tr>
+
+<tr><td>JK BOPEE</td><td>https://www.jkbopee.gov.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:50:17+00:00</td>
+<td>7</td></tr>
+
+<tr><td>UK HNBUMU</td><td>http://www.hnbumu.ac.in/</td>
+<td class="ok">2026-07-25T13:50:18+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>UK Ayush UAU</td><td>https://uau.ac.in/</td>
+<td class="ok">2026-07-25T13:50:17+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>UP Vet UPVETUNIV</td><td>https://upvetuniv.edu.in/</td>
+<td class="ok">2026-07-25T13:50:16+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>UK Vet Council</td><td>https://ahd.uk.gov.in/pages/display/133-uttarakhand-veterinary-council</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:50:21+00:00</td>
+<td>7</td></tr>
+
+<tr><td>WB MCC</td><td>https://wbmcc.nic.in/</td>
+<td class="ok">2026-07-25T13:50:21+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>UK Vet GBPUAT</td><td>https://www.gbpuat.ac.in/</td>
+<td class="ok">2026-07-25T13:50:24+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>WB Vet WBUAFSCE</td><td>https://www.wbuafsce.org/</td>
+<td class="ok">2026-07-25T13:50:23+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>Karnataka CET</td><td>https://cetonline.karnataka.gov.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:50:19+00:00</td>
+<td>7</td></tr>
+
+<tr><td>WB BPT WBJEEB</td><td>https://wbjeeb.in/</td>
+<td class="ok">2026-07-25T13:50:25+00:00</td>
+<td class="">-</td>
+<td>0</td></tr>
+
+<tr><td>MP Ayush Gov</td><td>http://ayush.mp.gov.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:50:21+00:00</td>
+<td>7</td></tr>
+
+<tr><td>MP Vet Crisp</td><td>http://crisponlineservices.com/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:50:22+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Meghalaya Health</td><td>https://meghealth.gov.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:50:24+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Odisha Ayush</td><td>http://www.ayushodisha.nic.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:50:31+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Odisha Vet OUAT</td><td>http://www.ouat.nic.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:50:31+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Odisha DAHVS</td><td>https://dahvs.odisha.gov.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:50:32+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Rajasthan BPT RUHS</td><td>https://ruhsraj.org/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:50:41+00:00</td>
+<td>7</td></tr>
+
+<tr><td>TN Health</td><td>https://tnhealth.tn.gov.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:50:44+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Telangana Vet TSVU</td><td>https://tsvu.nic.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:51:02+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Tripura DME</td><td>https://dme.tripura.gov.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:51:06+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Tripura TVC Vet</td><td>https://tvc.tripura.gov.in/</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:51:13+00:00</td>
+<td>7</td></tr>
+
+<tr><td>Tripura ARDD</td><td>https://ardd.tripura.gov.in/college_home</td>
+<td class="ok">-</td>
+<td class="fail">2026-07-25T13:51:16+00:00</td>
+<td>7</td></tr>
+
+</table>
+</body></html>
