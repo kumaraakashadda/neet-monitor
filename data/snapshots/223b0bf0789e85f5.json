@@ -1,9 +1,12 @@
 {
   "title": "",
-  "headings": [],
+  "headings": [
+    "CyberPanel Installed",
+    "You have successfully installed CyberPanel, please remove this page and upload your website. :)"
+  ],
   "notice_texts": [],
   "notice_links": [],
   "pdf_links": [],
-  "raw_text": "",
-  "_saved_at": "2026-08-12T22:34:01+00:00"
+  "raw_text": "CyberPanel Installed You have successfully installed CyberPanel, please remove this page and upload your website. :) Hosting Control Panel Forums Documentation",
+  "_saved_at": "2026-08-13T01:23:54+00:00"
 }
